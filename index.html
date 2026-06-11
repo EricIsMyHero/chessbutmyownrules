@@ -241,36 +241,36 @@ body {
       <div class="diff-icon">😊</div>
       <div class="diff-info">
         <div class="diff-name">Asan</div>
-        <div class="diff-desc">Hər həmlə üçün 7 saniyə. Fiqur məlumatları gizlənir.</div>
+        <div class="diff-desc">Hər həmlə üçün 10 saniyə. Fiqur məlumatları gizlənir.</div>
       </div>
-      <div class="diff-badge">7 san</div>
+      <div class="diff-badge">10 san</div>
     </div>
 
     <div class="diff-btn orta" onclick="startGame('orta')">
       <div class="diff-icon">😐</div>
       <div class="diff-info">
         <div class="diff-name">Orta</div>
-        <div class="diff-desc">Hər həmlə üçün 5 saniyə. Fiqur məlumatları gizlənir.</div>
+        <div class="diff-desc">Hər həmlə üçün 7 saniyə. Fiqur məlumatları gizlənir.</div>
       </div>
-      <div class="diff-badge">5 san</div>
+      <div class="diff-badge">7 san</div>
     </div>
 
     <div class="diff-btn cetin" onclick="startGame('cetin')">
       <div class="diff-icon">😤</div>
       <div class="diff-info">
         <div class="diff-name">Çətin</div>
-        <div class="diff-desc">Hər həmlə üçün 3 saniyə. Fiqur məlumatları gizlənir.</div>
+        <div class="diff-desc">Hər həmlə üçün 5 saniyə. Fiqur məlumatları gizlənir.</div>
       </div>
-      <div class="diff-badge">3 san</div>
+      <div class="diff-badge">5 san</div>
     </div>
 
     <div class="diff-btn imkansiz" onclick="startGame('imkansiz')">
       <div class="diff-icon">💀</div>
       <div class="diff-info">
         <div class="diff-name">İmkansız</div>
-        <div class="diff-desc">3 saniyədən başlayır, hər həmlədən sonra 0.20 san azalır (min 1 san). Fiqur məlumatları gizlənir.</div>
+        <div class="diff-desc">5 saniyədən başlayır, hər həmlədən sonra 0.20 san azalır (min 2 san). Fiqur məlumatları gizlənir.</div>
       </div>
-      <div class="diff-badge">3→1 san</div>
+      <div class="diff-badge">5→2 san</div>
     </div>
 
   </div>
@@ -337,10 +337,10 @@ body {
 // ═══════════════════════════════════════════
 const DIFFICULTIES = {
   bebe:     { label:'🍼 Bəbə',     color:'#7ddd7d', timeLimit:0,    showInfo:true,  timeDecay:0 },
-  asan:     { label:'😊 Asan',     color:'#7dcfdd', timeLimit:7,    showInfo:false, timeDecay:0 },
-  orta:     { label:'😐 Orta',     color:'#dddd7d', timeLimit:5,    showInfo:false, timeDecay:0 },
-  cetin:    { label:'😤 Çətin',    color:'#ddaa7d', timeLimit:3,    showInfo:false, timeDecay:0 },
-  imkansiz: { label:'💀 İmkansız', color:'#dd7d7d', timeLimit:3,    showInfo:false, timeDecay:0.2 },
+  asan:     { label:'😊 Asan',     color:'#7dcfdd', timeLimit:10,   showInfo:false, timeDecay:0 },
+  orta:     { label:'😐 Orta',     color:'#dddd7d', timeLimit:7,    showInfo:false, timeDecay:0 },
+  cetin:    { label:'😤 Çətin',    color:'#ddaa7d', timeLimit:5,    showInfo:false, timeDecay:0 },
+  imkansiz: { label:'💀 İmkansız', color:'#dd7d7d', timeLimit:5,    showInfo:false, timeDecay:0.2 },
 };
 
 let difficulty = 'bebe';
@@ -365,8 +365,10 @@ const PIECE_DEFS = {
   MM: { name:'Mimic',      sym:'🎭', special:true,  desc:'Adi halda 1 xana hər istiqamətdə. Fiqur vurduqda onun xüsusiyyətlərini mənimsəyir.' },
   RH: { name:'Rhino',      sym:'🦏', special:true,  desc:'At + Fil birlikdə. Eyni anda iki fiqurun gücü!' },
   BS: { name:'Backstabber',sym:'🔪', special:true,  desc:'2 xana uzaqdakı fiqurla yer dəyişər (Chebyshev=2). Şahla yer dəyişə bilmir.' },
+  CL: { name:'Clown',      sym:'🤡', special:true,  desc:'Adi halda 1 xana hər istiqamətdə. Üfüqi/şaquli 2 xana uzağa hücum edər. Bir daş itirərsə onun funksiyalarını alar.' },
+  EX: { name:'Exchanger',  sym:'💱', special:true,  desc:'Rəqib şah ilə yer dəyişər. Yer dəyişdikdə rəng dəyişib rəqib şaha çevrilər; rəqib şah isə əks rəngdəki piyadaya çevrilər.' },
 };
-const ALL_SPECIAL = ['PH','NC','TP','AS','MM','RH','BS'];
+const ALL_SPECIAL = ['PH','NC','TP','AS','MM','RH','BS','CL','EX'];
 
 // ═══════════════════════════════════════════
 // GAME STATE
@@ -375,6 +377,8 @@ let board=[], selected=null, validMoves=[], turn='white';
 let lastMove=null, gameOver=false, ultraMode=false;
 let cemetery=[], mimicType=null, blackMimicType=null;
 let whiteInCheck=false, blackInCheck=false;
+// Clown absorbed type state
+let whiteClownType=null, blackClownType=null;
 
 // ═══════════════════════════════════════════
 // SCREEN NAVIGATION
@@ -472,7 +476,7 @@ function onPlayerMoveDone() {
   // Decay for impossible
   const cfg = DIFFICULTIES[difficulty];
   if (cfg.timeDecay > 0) {
-    currentTimeLimit = Math.max(1, +(currentTimeLimit - cfg.timeDecay).toFixed(2));
+    currentTimeLimit = Math.max(2, +(currentTimeLimit - cfg.timeDecay).toFixed(2));
   }
 }
 
@@ -483,8 +487,8 @@ function shuffle(arr) { return [...arr].sort(()=>Math.random()-0.5); }
 
 function makeBlackBackRow() {
   const specials = shuffle(ALL_SPECIAL);
-  const eligible = shuffle([1,2,5,6]);
-  const replaceCount = 2 + Math.floor(Math.random()*3);
+  const eligible = shuffle([0,1,2,5,6,7]);
+  const replaceCount = 4 + Math.floor(Math.random()*3);
   const row = ['R','N','B','Q','K','B','N','R'];
   for(let i=0; i<Math.min(replaceCount, eligible.length, specials.length); i++)
     row[eligible[i]] = specials[i];
@@ -494,8 +498,8 @@ function makeBlackBackRow() {
 function makeWhiteBackRow(useSpecial) {
   if(!useSpecial) return ['R','N','B','Q','K','B','N','R'];
   const specials = shuffle(ALL_SPECIAL);
-  const eligible = shuffle([1,2,5,6]);
-  const replaceCount = 2 + Math.floor(Math.random()*3);
+  const eligible = shuffle([0,1,2,5,6,7]);
+  const replaceCount = 4 + Math.floor(Math.random()*3);
   const row = ['R','N','B','Q','K','B','N','R'];
   for(let i=0; i<Math.min(replaceCount, eligible.length, specials.length); i++)
     row[eligible[i]] = specials[i];
@@ -505,6 +509,7 @@ function makeWhiteBackRow(useSpecial) {
 function initBoard() {
   board = Array(8).fill(null).map(()=>Array(8).fill(null));
   cemetery=[]; mimicType=null; blackMimicType=null;
+  whiteClownType=null; blackClownType=null;
   whiteInCheck=false; blackInCheck=false;
 
   const blackBack = makeBlackBackRow();
@@ -530,6 +535,11 @@ function getRawMoves(row, col, brd, mT, bmT) {
   const ally=piece.color;
   let eff=piece.type;
   if(piece.type==='MM') eff=(piece.color==='white'?mT:bmT)||'MM';
+  // Clown absorbs the type of a lost piece
+  if(piece.type==='CL') {
+    const cT = piece.color==='white' ? whiteClownType : blackClownType;
+    if(cT) eff=cT; else eff='CL';
+  }
 
   function add(r,c,meta={}) {
     if(r<0||r>7||c<0||c>7) return;
@@ -617,7 +627,25 @@ function getRawMoves(row, col, brd, mT, bmT) {
       [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc])=>add(row+dr,col+dc));
       break;
     case 'RH': knight(); [[-1,-1],[-1,1],[1,-1],[1,1]].forEach(([dr,dc])=>slide(dr,dc)); break;
-  }
+    case 'CL': {
+      // Normal: 1 step any direction
+      [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc])=>add(row+dr,col+dc));
+      // Attack only: horizontal/vertical 2 squares
+      [[0,-2],[0,2],[-2,0],[2,0]].forEach(([dr,dc])=>{
+        const r2=row+dr, c2=col+dc;
+        if(r2<0||r2>7||c2<0||c2>7) return;
+        if(brd[r2][c2]?.color===enemy) moves.push({r:r2,c:c2,clownAttack:true});
+      });
+      break;
+    }
+    case 'EX': {
+      // Exchanger swaps with enemy king
+      for(let r2=0;r2<8;r2++) for(let c2=0;c2<8;c2++) {
+        if(brd[r2][c2]?.type==='K'&&brd[r2][c2]?.color===enemy)
+          moves.push({r:r2,c:c2,exchange:true});
+      }
+      break;
+    }
   return moves;
 }
 
@@ -635,7 +663,7 @@ function isInCheck(color,brd,mT,bmT) {
   for(let r=0;r<8;r++) for(let c=0;c<8;c++) {
     if(brd[r][c]?.color!==attacker) continue;
     const mvs=getRawMoves(r,c,brd,mT,bmT);
-    if(mvs.some(m=>m.r===kPos[0]&&m.c===kPos[1]&&!m.necro&&!m.swap)) return true;
+    if(mvs.some(m=>m.r===kPos[0]&&m.c===kPos[1]&&!m.necro&&!m.swap&&!m.exchange&&!m.clownAttack)) return true;
   }
   return false;
 }
@@ -643,6 +671,13 @@ function applyMoveToBoard(brd,fr,fc,tr,tc,meta) {
   const piece=brd[fr][fc]; if(!piece) return;
   if(meta?.swap) { const t=brd[tr][tc]; brd[tr][tc]=piece; brd[fr][fc]=t; return; }
   if(meta?.necro) { brd[tr][tc]={type:'P',color:piece.color}; return; }
+  if(meta?.exchange) {
+    const myColor=piece.color, enemyColor=brd[tr][tc]?.color||'black';
+    brd[tr][tc]={type:'K', color:enemyColor};
+    brd[fr][fc]={type:'P', color:myColor};
+    return;
+  }
+  if(meta?.clownAttack) { brd[tr][tc]=null; return; }
   if(meta?.assassin&&brd[tr][tc]) { brd[tr][tc]=null; brd[fr][fc]=null; return; }
   brd[tr][tc]=piece; brd[fr][fc]=null;
 }
@@ -654,7 +689,10 @@ function moveLeavesInCheck(fr,fc,tr,tc,meta,color) {
 function getLegalMoves(row,col) {
   const piece=board[row][col]; if(!piece) return [];
   return getRawMoves(row,col,board,mimicType,blackMimicType)
-    .filter(m=>!moveLeavesInCheck(row,col,m.r,m.c,m,piece.color));
+    .filter(m=>{
+      if(m.exchange) return true; // exchange always legal (exchanger becomes king of enemy color)
+      return !moveLeavesInCheck(row,col,m.r,m.c,m,piece.color);
+    });
 }
 function getAllLegalMovesFor(color) {
   const all=[];
@@ -673,11 +711,36 @@ function doMove(fr,fc,tr,tc,meta) {
     if(cemetery.length>0) { cemetery.pop(); board[tr][tc]={type:'P',color:piece.color}; }
     lastMove=[[fr,fc],[tr,tc]]; return;
   }
+  // Exchanger: swap with enemy king, exchanger becomes enemy king color, enemy king becomes own-color pawn
+  if(meta?.exchange) {
+    const myColor=piece.color;
+    const enemyColor=target.color;
+    // Exchanger takes king's spot and becomes the enemy's king
+    board[tr][tc]={type:'K', color:enemyColor};
+    // Enemy king becomes a pawn of the exchanger's color at exchanger's old spot
+    board[fr][fc]={type:'P', color:myColor};
+    lastMove=[[fr,fc],[tr,tc]]; return;
+  }
+  // Clown attack: jump 2 orthogonal squares to capture, clown stays put
+  if(meta?.clownAttack) {
+    if(target) {
+      // Clown absorbs the captured piece's type
+      if(piece.color==='white') whiteClownType=target.type;
+      else blackClownType=target.type;
+      board[tr][tc]=null;
+    }
+    lastMove=[[fr,fc],[tr,tc]]; return;
+  }
   if(target) {
     if(target.color==='black'&&target.type==='P') cemetery.push('P');
     if(piece.type==='MM') {
       if(piece.color==='white') mimicType=target.type;
       else blackMimicType=target.type;
+    }
+    // Clown absorbs type when it moves into a piece normally too
+    if(piece.type==='CL') {
+      if(piece.color==='white') whiteClownType=target.type;
+      else blackClownType=target.type;
     }
   }
   if(meta?.assassin&&target) { board[tr][tc]=null; board[fr][fc]=null; lastMove=[[fr,fc],[tr,tc]]; return; }
@@ -688,7 +751,7 @@ function doMove(fr,fc,tr,tc,meta) {
 // ═══════════════════════════════════════════
 // AI — Minimax depth 2
 // ═══════════════════════════════════════════
-const PIECE_VALUE={P:1,N:3,B:3,R:5,Q:9,K:100,PH:4,NC:3,TP:3,AS:3,MM:3,RH:6,BS:2};
+const PIECE_VALUE={P:1,N:3,B:3,R:5,Q:9,K:100,PH:4,NC:3,TP:3,AS:3,MM:3,RH:6,BS:2,CL:4,EX:7};
 function boardScore() {
   let s=0;
   for(let r=0;r<8;r++) for(let c=0;c<8;c++) {
@@ -708,10 +771,12 @@ function minimax(depth,maximizing,alpha,beta) {
     for(const mv of allMoves) {
       const saved=board.map(r=>r.map(c=>c?{...c}:null));
       const smT=mimicType,sbmT=blackMimicType,scem=[...cemetery];
+      const swCT=whiteClownType, sbCT=blackClownType;
       doMove(mv.fr,mv.fc,mv.r,mv.c,mv);
       const val=minimax(depth-1,false,alpha,beta);
       board.forEach((row,r)=>row.forEach((_,c)=>board[r][c]=saved[r][c]));
       mimicType=smT; blackMimicType=sbmT; cemetery=scem;
+      whiteClownType=swCT; blackClownType=sbCT;
       best=Math.max(best,val); alpha=Math.max(alpha,val);
       if(beta<=alpha) break;
     }
@@ -721,10 +786,12 @@ function minimax(depth,maximizing,alpha,beta) {
     for(const mv of allMoves) {
       const saved=board.map(r=>r.map(c=>c?{...c}:null));
       const smT=mimicType,sbmT=blackMimicType,scem=[...cemetery];
+      const swCT=whiteClownType, sbCT=blackClownType;
       doMove(mv.fr,mv.fc,mv.r,mv.c,mv);
       const val=minimax(depth-1,true,alpha,beta);
       board.forEach((row,r)=>row.forEach((_,c)=>board[r][c]=saved[r][c]));
       mimicType=smT; blackMimicType=sbmT; cemetery=scem;
+      whiteClownType=swCT; blackClownType=sbCT;
       best=Math.min(best,val); beta=Math.min(beta,val);
       if(beta<=alpha) break;
     }
@@ -739,10 +806,12 @@ function aiMove() {
   for(const mv of allMoves) {
     const saved=board.map(r=>r.map(c=>c?{...c}:null));
     const smT=mimicType,sbmT=blackMimicType,scem=[...cemetery];
+    const swCT=whiteClownType, sbCT=blackClownType;
     doMove(mv.fr,mv.fc,mv.r,mv.c,mv);
     const val=minimax(1,false,-Infinity,Infinity);
     board.forEach((row,r)=>row.forEach((_,c)=>board[r][c]=saved[r][c]));
     mimicType=smT; blackMimicType=sbmT; cemetery=scem;
+    whiteClownType=swCT; blackClownType=sbCT;
     if(val>bestVal) { bestVal=val; bestMv=mv; }
   }
   doMove(bestMv.fr,bestMv.fc,bestMv.r,bestMv.c,bestMv);
@@ -842,7 +911,7 @@ function renderBoard() {
     if(blackInCheck&&bKing&&r===bKing[0]&&c===bKing[1]) cell.classList.add('in-check');
     if(validMoves.length) {
       const mv=validMoves.find(m=>m.r===r&&m.c===c);
-      if(mv) cell.classList.add(mv.swap?'swap-move':(board[r][c]?'capture-move':'valid-move'));
+      if(mv) cell.classList.add(mv.swap||mv.exchange?'swap-move':(board[r][c]?'capture-move':'valid-move'));
     }
     const piece=board[r][c];
     if(piece) {
@@ -921,6 +990,7 @@ function resetGame(){
   stopTimer();
   selected=null; validMoves=[]; turn='white'; lastMove=null; gameOver=false;
   cemetery=[]; mimicType=null; blackMimicType=null;
+  whiteClownType=null; blackClownType=null;
   whiteInCheck=false; blackInCheck=false;
   currentTimeLimit = DIFFICULTIES[difficulty].timeLimit;
   initBoard(); updateCheckState();
