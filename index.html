@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VibeEdit 2026 - Video Portal</title>
-    <!-- Tailwind CSS CDN -->
+    <title>K.A.D.R - Premium Video Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tailwind config for custom shadows & anims -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -27,11 +25,11 @@
                             '100%': { opacity: '1' },
                         },
                         slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '0%': { transform: 'translateY(15px)', opacity: '0' },
                             '100%': { transform: 'translateY(0)', opacity: '1' },
                         },
                         scaleUp: {
-                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
                             '100%': { transform: 'scale(1)', opacity: '1' },
                         }
                     }
@@ -40,180 +38,186 @@
         }
     </script>
     <style>
-        /* Smooth scrolling */
+        /* Base page styling with GitHub Dark color scheme (#0d1117) */
         html {
             scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
+            background-color: #0d1117;
         }
-        /* Custom scrollbar for premium styling */
+        
+        /* Custom scrollbar for desktop preview */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #121214;
+            background: #0d1117;
         }
         ::-webkit-scrollbar-thumb {
-            background: #27272a;
-            border-radius: 9999px;
+            background: #21262d;
+            border-radius: 99px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #3f3f46;
+            background: #30363d;
         }
-        /* Glassmorphism styling helpers */
+
+        /* Glassmorphism using dark theme elements */
         .glass {
-            background: rgba(15, 15, 18, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(240, 246, 252, 0.05);
         }
-        .glass-premium {
-            background: linear-gradient(135deg, rgba(24, 24, 27, 0.6) 0%, rgba(9, 9, 11, 0.8) 100%);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+        /* Logo customization with custom dark color scheme */
+        .logo-header {
+            font-family: "Arial Nova", Arial, sans-serif;
+            font-weight: 800;
+            letter-spacing: 2px;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
         }
+        .logo-header span {
+            transition: transform .25s ease;
+            display: inline-block;
+        }
+        .logo-header:hover span {
+            transform: translateY(-2px);
+        }
+        
+        /* Darker, rich premium color palette mapped precisely to user specs */
+        .k-color { color: #b01a2e; text-shadow: 0 0 15px rgba(176, 26, 46, 0.25); }
+        .a-color { color: #1a64a0; text-shadow: 0 0 15px rgba(26, 100, 160, 0.25); }
+        .d-color { color: #257a3e; text-shadow: 0 0 15px rgba(37, 122, 62, 0.25); }
+        .r-color { color: #c69200; text-shadow: 0 0 15px rgba(198, 146, 0, 0.25); }
+        .dot-color { color: rgba(240, 246, 252, 0.25); }
     </style>
 </head>
-<body class="bg-[#09090b] text-zinc-100 min-h-screen font-sans flex flex-col justify-between overflow-x-hidden selection:bg-rose-500/30 selection:text-rose-200">
+<body class="bg-[#0d1117] text-zinc-100 min-h-screen font-sans flex flex-col justify-between overflow-x-hidden selection:bg-rose-500/20 selection:text-rose-200">
 
-    
-    <!-- Toast notification container -->
+    <!-- Floating system notifications -->
     <div id="toast-container" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2"></div>
 
-    <!-- Main Container -->
-    <div class="w-full max-w-lg mx-auto min-h-screen flex flex-col relative pb-24 shadow-[0_0_80px_rgba(0,0,0,0.8)] border-x border-zinc-900 bg-[#0c0c0e]">
+    <!-- Main Mobile Frame Container -->
+    <div class="w-full max-w-lg mx-auto min-h-screen flex flex-col relative pb-28 shadow-[0_0_80px_rgba(0,0,0,0.6)] border-x border-[#21262d] bg-[#0d1117]">
         
-        <!-- Header: Top Glass Bar -->
-        <header class="sticky top-0 z-40 glass px-5 py-4 flex items-center justify-between transition-all duration-300">
-            <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-500 via-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-rose-500/20">
-                    <svg class="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 via-zinc-200 to-zinc-400 text-lg">VibeEdit</h1>
-                    <p class="text-[10px] text-zinc-500 font-medium tracking-wide uppercase">GitHub Pages Vibe</p>
-                </div>
+        <!-- HEADER: Logo area with configuration tools -->
+        <header class="sticky top-0 z-40 glass px-5 py-3.5 flex items-center justify-between transition-all duration-300">
+            <!-- Modern K.A.D.R Minimal Logo (Darker colors and shrunk slightly to fit layout) -->
+            <div class="logo-header text-xl cursor-pointer" onclick="switchTab('home'); clearTagFilter();">
+                <span class="k-color">K</span><span class="dot-color">.</span>
+                <span class="a-color">A</span><span class="dot-color">.</span>
+                <span class="d-color">D</span><span class="dot-color">.</span>
+                <span class="r-color">R</span>
             </div>
 
-            <!-- Dynamic Counter and Dev Tools -->
+            <!-- Configuration controller and Badge Counter -->
             <div class="flex items-center gap-2">
-                <button onclick="toggleDevSuite()" class="glass px-2.5 py-1.5 rounded-lg text-xs text-zinc-400 hover:text-rose-400 flex items-center gap-1 transition-all">
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <button onclick="toggleDevSuite()" class="glass px-2.5 py-1.5 rounded-[18px] text-[11px] text-zinc-400 hover:text-rose-400 flex items-center gap-1 transition-all">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <span class="hidden sm:inline">Quruluş</span>
+                    <span>Quruluş</span>
                 </button>
-                <div class="px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-[11px] text-rose-400 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-                    <span id="video-count-badge">0</span> Video
+                <div class="px-2.5 py-1 rounded-full bg-[#161b22] border border-[#21262d] text-[10px] text-zinc-300 font-bold flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="video-count-badge" class="text-zinc-100">0</span> Video
                 </div>
             </div>
         </header>
 
-        <!-- Dev Suite panel for GitHub Pages configuration / JSON preview -->
-        <div id="dev-suite" class="hidden fixed inset-x-0 top-[68px] max-w-lg mx-auto z-40 bg-[#0e0e11]/95 border-b border-zinc-800 p-5 animate-slide-up backdrop-blur-xl">
+        <!-- Dev Suite for real GitHub Pages videos.json configurations -->
+        <div id="dev-suite" class="hidden fixed inset-x-0 top-[58px] max-w-lg mx-auto z-40 bg-[#161b22]/98 border-b border-[#21262d] p-5 animate-slide-up backdrop-blur-xl">
             <h3 class="text-xs font-bold uppercase tracking-wider text-rose-500 mb-2">GitHub Pages Qovluq Quruluşu & JSON</h3>
             <p class="text-xs text-zinc-400 mb-4 leading-relaxed">
                 Bu tətbiq GitHub Pages üçün tam uyğundur. Aşağıdakı JSON məzmununu kopyalayıb repozitoriyanızda <code class="text-rose-400">data/videos.json</code> adı ilə saxlayın. Videolarınızı isə <code class="text-rose-400">videos/</code> qovluğuna yükləyin.
             </p>
 
             <!-- Mode Switcher -->
-            <div class="mb-4 bg-zinc-900 p-2 rounded-xl flex items-center justify-between border border-zinc-800">
+            <div class="mb-4 bg-[#0d1117] p-2.5 rounded-[18px] flex items-center justify-between border border-[#21262d]">
                 <span class="text-xs font-medium text-zinc-300">Video Mənbə Rejimi:</span>
-                <div class="flex gap-1">
-                    <button onclick="setSourceMode('demo')" id="btn-mode-demo" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all bg-rose-500 text-white">
-                        Demo (Online Linklər)
+                <div class="flex gap-1.5">
+                    <button onclick="setSourceMode('demo')" id="btn-mode-demo" class="px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all bg-[#1a64a0] text-white">
+                        Demo (Online)
                     </button>
-                    <button onclick="setSourceMode('local')" id="btn-mode-local" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-white">
+                    <button onclick="setSourceMode('local')" id="btn-mode-local" class="px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all text-zinc-400 hover:text-white">
                         Local (GitHub `/videos`)
                     </button>
                 </div>
             </div>
 
-            <!-- JSON output structure -->
-            <div class="relative bg-black/50 p-3 rounded-lg border border-zinc-800 text-[11px] font-mono text-zinc-300 overflow-x-auto max-h-40 mb-3">
+            <!-- JSON output structures -->
+            <div class="relative bg-black/40 p-3 rounded-[18px] border border-[#21262d] text-[10px] font-mono text-zinc-300 overflow-x-auto max-h-40 mb-3">
                 <pre id="json-preview"></pre>
-                <button onclick="copyJsonToClipboard()" class="absolute right-2 top-2 px-2 py-1 bg-zinc-800 hover:bg-zinc-700 text-[10px] text-zinc-200 rounded transition-colors">
+                <button onclick="copyJsonToClipboard()" class="absolute right-2 top-2 px-2.5 py-1 bg-[#21262d] hover:bg-[#30363d] text-[9px] text-zinc-200 rounded-[18px] transition-colors">
                     Kopyala
                 </button>
             </div>
-            <button onclick="toggleDevSuite()" class="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-xs font-bold text-zinc-300 rounded-xl transition-all border border-zinc-800">
+            <button onclick="toggleDevSuite()" class="w-full py-2.5 bg-[#21262d] hover:bg-[#30363d] text-xs font-bold text-zinc-300 rounded-[18px] transition-all">
                 Paneli Bağla
             </button>
         </div>
 
+        <!-- Main Body Frame layout -->
         <main class="flex-1 p-4 relative z-10">
 
             <!-- TAB: HOME (LATEST VIDEOS & FEEDS) -->
-            <section id="tab-home" class="space-y-6">
-                <!-- Sorting & Quick Filters -->
-                <div class="flex items-center justify-between bg-zinc-950/40 p-3 rounded-2xl border border-zinc-900">
+            <section id="tab-home" class="space-y-5">
+                <div class="flex items-center justify-between bg-[#161b22] p-3 rounded-[18px] border border-[#21262d]">
                     <div class="flex gap-1.5">
-                        <button onclick="changeSort('date')" id="btn-sort-date" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-rose-400 border border-rose-500/10">
-                            🔥 Ən Yeni
+                        <button onclick="changeSort('date')" id="btn-sort-date" class="px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-[#b01a2e] border border-[#b01a2e]/20 shadow-lg">
+                            🔥 Son Videolar
                         </button>
-                        <button onclick="changeSort('title')" id="btn-sort-title" class="px-3 py-1.5 rounded-xl text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
+                        <button onclick="changeSort('title')" id="btn-sort-title" class="px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
                             🔤 Başlıq
                         </button>
-                        <button onclick="changeSort('favorites')" id="btn-sort-favorites" class="px-3 py-1.5 rounded-xl text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
+                        <button onclick="changeSort('favorites')" id="btn-sort-favorites" class="px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
                             ⭐️ Favorilər
                         </button>
                     </div>
-                    <span class="text-[11px] font-medium text-zinc-500" id="sort-indicator">Sıralama: Tarix</span>
                 </div>
 
-                <!-- Active Tag Filter Indicator -->
-                <div id="active-tag-indicator" class="hidden bg-rose-500/10 border border-rose-500/20 p-3 rounded-2xl flex items-center justify-between animate-fade-in">
-                    <span class="text-xs font-medium text-rose-300">
+                <!-- Active Filter Indicator tag layout -->
+                <div id="active-tag-indicator" class="hidden bg-[#161b22] border border-[#21262d] p-3.5 rounded-[18px] flex items-center justify-between animate-fade-in">
+                    <span class="text-xs font-medium text-zinc-300">
                         Süzgəc: <span id="active-tag-name" class="font-bold uppercase tracking-wider text-rose-400">#tag</span>
                     </span>
-                    <button onclick="clearTagFilter()" class="text-zinc-400 hover:text-rose-400 text-xs flex items-center gap-1 font-bold">
+                    <button onclick="clearTagFilter()" class="text-zinc-400 hover:text-rose-400 text-xs flex items-center gap-1 font-bold bg-[#0d1117] px-2 py-1 rounded-[18px]">
                         Sıfırla ✕
                     </button>
                 </div>
 
-                <!-- Skeleton Loading State (Initially Shown) -->
-                <div id="skeleton-loader" class="space-y-6">
-                    <div class="bg-zinc-900/40 border border-zinc-900 rounded-3xl p-3.5 space-y-4 animate-pulse">
-                        <div class="aspect-video bg-zinc-800 rounded-2.5xl"></div>
-                        <div class="h-4 bg-zinc-800 rounded w-2/3"></div>
+                <!-- Skeleton pre-loader layout -->
+                <div id="skeleton-loader" class="space-y-5">
+                    <div class="bg-[#161b22] border border-[#21262d] rounded-[18px] p-4 space-y-4 animate-pulse">
+                        <div class="aspect-video bg-[#30363d] rounded-[18px]"></div>
+                        <div class="h-4 bg-[#30363d] rounded w-2/3"></div>
                         <div class="flex gap-2">
-                            <div class="h-6 bg-zinc-800 rounded-lg w-16"></div>
-                            <div class="h-6 bg-zinc-800 rounded-lg w-20"></div>
-                        </div>
-                    </div>
-                    <div class="bg-zinc-900/40 border border-zinc-900 rounded-3xl p-3.5 space-y-4 animate-pulse">
-                        <div class="aspect-video bg-zinc-800 rounded-2.5xl"></div>
-                        <div class="h-4 bg-zinc-800 rounded w-1/2"></div>
-                        <div class="flex gap-2">
-                            <div class="h-6 bg-zinc-800 rounded-lg w-14"></div>
+                            <div class="h-6 bg-[#30363d] rounded-lg w-16"></div>
+                            <div class="h-6 bg-[#30363d] rounded-lg w-20"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Video Grid Container -->
-                <div id="video-grid" class="hidden space-y-6">
-                    <!-- Cards will be dynamically loaded via script -->
-                </div>
+                <!-- Main dynamic video content area -->
+                <div id="video-grid" class="hidden space-y-5"></div>
 
-                <!-- Empty state fallback -->
+                <!-- Empty video grid fallback state -->
                 <div id="empty-state" class="hidden py-16 text-center space-y-4">
-                    <div class="w-16 h-16 bg-zinc-900/60 rounded-full flex items-center justify-center mx-auto border border-zinc-800 text-zinc-500 text-2xl">
+                    <div class="w-16 h-16 bg-[#161b22] rounded-full flex items-center justify-center mx-auto border border-[#21262d] text-zinc-500 text-2xl">
                         🎬
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-zinc-300">Heç bir video tapılmadı</h3>
-                        <p class="text-xs text-zinc-500 mt-1">Siyahı boşdur və ya süzgəcləri sıfırlayın.</p>
+                        <p class="text-xs text-zinc-500 mt-1">Siyahı boşdur və ya fərqli süzgəc seçin.</p>
                     </div>
                 </div>
             </section>
 
             <!-- TAB: SEARCH -->
-            <section id="tab-search" class="hidden space-y-6 animate-slide-up">
+            <section id="tab-search" class="hidden space-y-5 animate-slide-up">
                 <div class="space-y-3">
                     <h2 class="text-lg font-black tracking-tight text-zinc-100 flex items-center gap-2">
                         <span>🔍</span> Video Axtarın
@@ -225,52 +229,46 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </span>
-                        <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Video, kateqoriya və ya tag axtarın..." class="w-full bg-zinc-950/60 border border-zinc-800/80 rounded-2xl py-3.5 pl-12 pr-10 text-sm placeholder-zinc-500 focus:outline-none focus:border-rose-500/50 focus:ring-1 focus:ring-rose-500/20 transition-all text-zinc-200">
+                        <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Video, kateqoriya və ya tag axtarın..." class="w-full bg-[#161b22] border border-[#21262d] rounded-[18px] py-3.5 pl-12 pr-10 text-sm placeholder-zinc-500 focus:outline-none focus:border-[#1a64a0]/50 focus:ring-1 focus:ring-[#1a64a0]/20 transition-all text-zinc-200">
                         <button onclick="clearSearchInput()" id="btn-search-clear" class="absolute right-4 text-zinc-400 hover:text-zinc-200 hidden">
                             ✕
                         </button>
                     </div>
                 </div>
 
-                <!-- Search Suggestions / Quick tags search -->
+                <!-- Search suggestion fast filters tags -->
                 <div class="space-y-3">
                     <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Sürətli axtarış tagləri</span>
-                    <div class="flex flex-wrap gap-2" id="search-tag-suggestions">
-                        <!-- Suggestion pills loaded dynamically -->
-                    </div>
+                    <div class="flex flex-wrap gap-2" id="search-tag-suggestions"></div>
                 </div>
 
-                <!-- Search Results container -->
+                <!-- Search Query listing results -->
                 <div class="space-y-4 pt-2">
                     <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest" id="search-results-heading">Tapılan Videolar</span>
-                    <div id="search-results-grid" class="space-y-4">
-                        <!-- Custom thin search cards -->
-                    </div>
+                    <div id="search-results-grid" class="space-y-3.5"></div>
                 </div>
             </section>
 
             <!-- TAB: TAGS / CATEGORIES -->
-            <section id="tab-tags" class="hidden space-y-6 animate-slide-up">
+            <section id="tab-tags" class="hidden space-y-5 animate-slide-up">
                 <div class="space-y-1">
                     <h2 class="text-lg font-black tracking-tight text-zinc-100 flex items-center gap-2">
                         <span>📂</span> Bütün Kateqoriyalar
                     </h2>
-                    <p class="text-xs text-zinc-500">Müxtəlif mövzularda hazırlanmış sehirli dünyanı kəşf edin.</p>
+                    <p class="text-xs text-zinc-400">Müxtəlif mövzularda hazırlanmış sehirli dünyanı kəşf edin.</p>
                 </div>
 
-                <!-- Categorized Grid Cards -->
-                <div id="tags-category-grid" class="grid grid-cols-2 gap-3.5">
-                    <!-- Dynamically loaded neon tag tiles -->
-                </div>
+                <!-- Beautiful grid listing all matching tag sections -->
+                <div id="tags-category-grid" class="grid grid-cols-2 gap-3.5"></div>
             </section>
 
         </main>
 
-        <!-- Floating Navigation: iPhone styled menu with Glassmorphism -->
-        <nav id="bottom-nav" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm rounded-2xl glass shadow-[0_12px_40px_rgba(0,0,0,0.6)] px-4 py-3 flex items-center justify-around transition-all duration-300">
+        <!-- FLOATING NAVIGATION: iPhone Styled Menu with Glassmorphism and Auto-hide on Scroll -->
+        <nav id="bottom-nav" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm rounded-[18px] glass shadow-[0_12px_40px_rgba(0,0,0,0.5)] px-4 py-3 flex items-center justify-around transition-all duration-300">
             <!-- Home Item -->
-            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-1 group text-rose-500 transition-colors">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all bg-rose-500/10 scale-105" id="nav-icon-home-bg">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-1 group text-[#b01a2e] transition-colors">
+                <div class="w-10 h-10 rounded-[18px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105" id="nav-icon-home-bg">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                     </svg>
@@ -280,7 +278,7 @@
 
             <!-- Search Item -->
             <button onclick="switchTab('search')" id="nav-search" class="flex flex-col items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all" id="nav-icon-search-bg">
+                <div class="w-10 h-10 rounded-[18px] flex items-center justify-center transition-all" id="nav-icon-search-bg">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -290,7 +288,7 @@
 
             <!-- Tags/Folder Item -->
             <button onclick="switchTab('tags')" id="nav-tags" class="flex flex-col items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all" id="nav-icon-tags-bg">
+                <div class="w-10 h-10 rounded-[18px] flex items-center justify-center transition-all" id="nav-icon-tags-bg">
                     <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                     </svg>
@@ -301,106 +299,100 @@
 
     </div>
 
-    <!-- Full-screen Lightbox Video Player -->
-    <div id="video-lightbox" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center overflow-hidden transition-all duration-300 opacity-0">
+    <!-- Full-screen Lightbox Video Player Chassis -->
+    <div id="video-lightbox" class="hidden fixed inset-0 z-50 bg-black/98 backdrop-blur-2xl flex items-center justify-center overflow-hidden transition-all duration-300 opacity-0">
         <!-- Blur Background Backing -->
         <div id="player-blur-bg" class="absolute inset-0 bg-cover bg-center filter blur-3xl opacity-20 transition-all duration-500 scale-110"></div>
         
-        <!-- Video Container Chassis -->
+        <!-- Inside Frame Layout Area -->
         <div class="relative w-full max-w-lg h-full max-h-screen flex flex-col justify-between items-center z-10 py-6 px-4">
             
-            <!-- Top Controls -->
-            <div class="w-full flex items-center justify-between glass px-4 py-3.5 rounded-2xl border border-white/5 z-20">
+            <!-- Top Controls bar -->
+            <div class="w-full flex items-center justify-between glass px-4 py-3 rounded-[18px] border border-white/5 z-20">
                 <button onclick="closeLightbox()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors text-white">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
                 <div class="text-center max-w-[60%]">
-                    <h4 id="player-title" class="text-sm font-black text-white truncate">Video Title</h4>
-                    <p id="player-author" class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider mt-0.5">VibeEdit Premium</p>
+                    <h4 id="player-title" class="text-xs font-black text-white truncate">Video Title</h4>
+                    <p id="player-author" class="text-[9px] text-zinc-400 font-bold uppercase tracking-wider mt-0.5">K.A.D.R Premium</p>
                 </div>
-                <!-- Status (Watched indicator in Player) -->
+                <!-- Watched Indicator overlay -->
                 <div class="flex items-center gap-1.5">
                     <span id="player-watched-badge" class="px-2 py-0.5 bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] font-bold rounded-md hidden">
                         ✓ İZLƏNDİ
                     </span>
                     <button onclick="toggleFavoriteOnActive()" id="player-favorite-btn" class="text-zinc-400 hover:text-rose-500 transition-colors">
-                        <svg id="player-favorite-svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg id="player-favorite-svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                     </button>
                 </div>
             </div>
 
-            <!-- Video Player Object (Centrally aligned wrapper) -->
+            <!-- Video core item -->
             <div class="w-full flex-1 flex items-center justify-center relative my-4">
-                <div class="relative max-w-full max-h-[70vh] aspect-[9/16] bg-black/40 rounded-3xl overflow-hidden border border-white/5 flex items-center justify-center group" id="video-wrapper">
-                    <!-- HTML5 Video element -->
+                <div class="relative max-w-full max-h-[70vh] aspect-[9/16] bg-black/40 rounded-[18px] overflow-hidden border border-white/5 flex items-center justify-center group" id="video-wrapper">
                     <video id="main-video-player" playsinline class="w-full h-full object-contain cursor-pointer">
                         <source id="video-source" src="" type="video/mp4">
                     </video>
 
-                    <!-- Giant Play Overlay Icon -->
+                    <!-- Giant Play Switch Overlay -->
                     <div id="play-pause-overlay" onclick="togglePlay()" class="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                        <div class="w-16 h-16 rounded-full glass flex items-center justify-center text-white shadow-xl">
-                            <svg id="giant-play-svg" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="w-14 h-14 rounded-full glass flex items-center justify-center text-white shadow-xl">
+                            <svg id="giant-play-svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                             </svg>
                         </div>
                     </div>
 
-                    <!-- Left/Right navigation zones for mobile swipe/tap simulation -->
+                    <!-- Slide left/right navigations buttons -->
                     <div class="absolute left-0 inset-y-0 w-1/5 flex items-center justify-start pl-2 pointer-events-none">
-                        <button onclick="prevVideo(event)" class="pointer-events-auto w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="prevVideo(event)" class="pointer-events-auto w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity text-sm font-bold">
                             ‹
                         </button>
                     </div>
                     <div class="absolute right-0 inset-y-0 w-1/5 flex items-center justify-end pr-2 pointer-events-none">
-                        <button onclick="nextVideo(event)" class="pointer-events-auto w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="nextVideo(event)" class="pointer-events-auto w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity text-sm font-bold">
                             ›
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Player Bottom bar with control elements & stats -->
-            <div class="w-full glass p-4 rounded-3xl border border-white/5 space-y-3 z-20">
-                <!-- Custom Timeline progress bar -->
+            <!-- Custom Controls bar inside Player -->
+            <div class="w-full glass p-4 rounded-[18px] border border-white/5 space-y-3.5 z-20">
+                <!-- Timeline Seek line slider -->
                 <div class="space-y-1">
                     <div class="relative w-full h-1 bg-zinc-800 rounded-full overflow-hidden cursor-pointer" id="progress-container" onclick="seekVideo(event)">
                         <div id="progress-bar" class="absolute left-0 top-0 h-full bg-gradient-to-r from-rose-500 to-purple-500 w-0"></div>
                     </div>
-                    <div class="flex items-center justify-between text-[10px] text-zinc-400 font-bold">
+                    <div class="flex items-center justify-between text-[9px] text-zinc-400 font-bold">
                         <span id="current-time">00:00</span>
                         <span id="duration-time">00:00</span>
                     </div>
                 </div>
 
-                <!-- Primary Controller Bar -->
+                <!-- Controls and direct share capabilities -->
                 <div class="flex items-center justify-between gap-4">
-                    <!-- Actions -->
                     <div class="flex items-center gap-2">
-                        <!-- Play button -->
                         <button onclick="togglePlay()" class="p-2 bg-white text-zinc-950 hover:bg-zinc-200 transition-colors rounded-full" title="Oynat/Durdur">
-                            <svg id="play-icon-svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg id="play-icon-svg" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <!-- Mute/Unmute button -->
                         <button onclick="toggleMute()" class="p-2 bg-white/10 hover:bg-white/15 transition-colors rounded-full text-white" title="Səs">
-                            <svg id="mute-icon-svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg id="mute-icon-svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                             </svg>
                         </button>
-                        <!-- Info / Date of video upload -->
-                        <div class="text-[10px] text-zinc-400">
+                        <div class="text-[9px] text-zinc-400">
                             Yükləndi: <span id="player-days-ago" class="font-bold text-rose-400">X gün əvvəl</span>
                         </div>
                     </div>
 
-                    <!-- Share action -->
-                    <button onclick="shareActiveVideo()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition-all flex items-center gap-1.5">
+                    <button onclick="shareActiveVideo()" class="px-4 py-2 rounded-[18px] bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition-all flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 10.742l4.832-2.416m0 4.348l-4.832 2.416m-4.832-2.416a3 3 0 115.367-1.484 3 3 0 01-5.367 1.484zm10.602-5.46a3 3 0 115.368-1.484 3 3 0 01-5.368 1.484zm0 10.92a3 3 0 115.368-1.484 3 3 0 01-5.368 1.484z" />
                         </svg>
@@ -408,14 +400,11 @@
                     </button>
                 </div>
 
-                <!-- Video Tags inside Player -->
-                <div id="player-tags" class="flex flex-wrap gap-1.5 pt-1">
-                    <!-- Loaded dynamically -->
-                </div>
+                <div id="player-tags" class="flex flex-wrap gap-1.5 pt-1"></div>
             </div>
 
-            <!-- Swiping & Navigation helper tag for Desktop/Mobile UI -->
-            <div class="text-center text-[10px] text-zinc-500 font-bold flex items-center gap-3">
+            <!-- Desktop shortcut helper -->
+            <div class="text-center text-[9px] text-zinc-500 font-bold flex items-center gap-3">
                 <span>← Sol ox (Əvvəlki)</span>
                 <span>• Space (Dayandır) •</span>
                 <span>Sağ ox (Növbəti) →</span>
@@ -424,8 +413,7 @@
     </div>
 
     <script>
-        // High quality royalty-free videos for seamless dynamic preview
-        // All categories defined to match user query tags: couple-edit, film-edit, crush-list, normal-edit
+        // Premium royalty-free database mapping matching user spec keys
         const demoVideos = [
             {
                 "id": "vid-1",
@@ -469,7 +457,7 @@
             }
         ];
 
-        // Structure fallback representation of GitHub Pages Local Storage config
+        // Fallback structures representing GitHub Pages setup
         const localVideos = [
             {
                 "id": "local-1",
@@ -497,68 +485,58 @@
             }
         ];
 
-        // Application State Management
-        let currentSourceMode = localStorage.getItem('vibe_source_mode') || 'demo'; // 'demo' or 'local'
+        // Persistent application states
+        let currentSourceMode = localStorage.getItem('kadr_source_mode') || 'demo';
         let videosDatabase = currentSourceMode === 'demo' ? [...demoVideos] : [...localVideos];
         
         let currentTab = 'home';
         let searchQuery = '';
         let currentTagFilter = null;
-        let sortBy = 'date'; // 'date', 'title', 'favorites'
+        let sortBy = 'date';
         
-        // Favorites & Watched persisted in local storage
-        let favorites = JSON.parse(localStorage.getItem('vibe_favorites')) || [];
-        let watched = JSON.parse(localStorage.getItem('vibe_watched')) || [];
+        let favorites = JSON.parse(localStorage.getItem('kadr_favorites')) || [];
+        let watched = JSON.parse(localStorage.getItem('kadr_watched')) || [];
 
-        // Active Lightbox Player states
         let activeVideo = null;
         let activeVideoIndex = -1;
         let isMuted = false;
 
-        // Colors tag index helper for premium dynamic pills styling
+        // Custom theme map syncing K.A.D.R colors cleanly
         const tagStyles = {
-            "film-edit": { bg: "bg-teal-500/10", border: "border-teal-500/20", text: "text-teal-400", label: "🎬 Film Edit", glow: "shadow-teal-500/10" },
-            "couple-edit": { bg: "bg-rose-500/10", border: "border-rose-500/20", text: "text-rose-400", label: "❤️ Couple Edit", glow: "shadow-rose-500/10" },
-            "crush-list": { bg: "bg-purple-500/10", border: "border-purple-500/20", text: "text-purple-400", label: "⭐ Crush List", glow: "shadow-purple-500/10" },
-            "normal-edit": { bg: "bg-blue-500/10", border: "border-blue-500/20", text: "text-blue-400", label: "🎨 Normal Edit", glow: "shadow-blue-500/10" }
+            "film-edit": { bg: "bg-[#b01a2e]/10", border: "border-[#b01a2e]/20", text: "text-[#b01a2e]", label: "🎬 Film Edit", glow: "shadow-[#b01a2e]/5" },
+            "couple-edit": { bg: "bg-[#1a64a0]/10", border: "border-[#1a64a0]/20", text: "text-[#1a64a0]", label: "❤️ Couple Edit", glow: "shadow-[#1a64a0]/5" },
+            "crush-list": { bg: "bg-[#257a3e]/10", border: "border-[#257a3e]/20", text: "text-[#257a3e]", label: "⭐ Crush List", glow: "shadow-[#257a3e]/5" },
+            "normal-edit": { bg: "bg-[#c69200]/10", border: "border-[#c69200]/20", text: "text-[#c69200]", label: "🎨 Normal Edit", glow: "shadow-[#c69200]/5" }
         };
 
-        const defaultTagStyle = { bg: "bg-zinc-500/10", border: "border-zinc-500/20", text: "text-zinc-400", label: "✨ Edit", glow: "shadow-zinc-500/10" };
+        const defaultTagStyle = { bg: "bg-zinc-500/10", border: "border-zinc-500/20", text: "text-zinc-400", label: "✨ Edit", glow: "shadow-zinc-500/5" };
 
-        // Initializer
         window.onload = function() {
-            // Setup dynamic previews in dev panel on start
             updateJsonPreview();
             
-            // Simulating Skeleton loading state
             setTimeout(() => {
-                document.getElementById('skeleton-loader').classList.add('hidden');
+                const loader = document.getElementById('skeleton-loader');
+                if(loader) loader.classList.add('hidden');
                 document.getElementById('video-grid').classList.remove('hidden');
                 renderApp();
-            }, 1200);
+            }, 1000);
 
-            // Scroll listener for hiding menu
             setupAutoHideMenu();
-
-            // Keyboard listeners
             setupKeyboardControls();
-
-            // Setup Video Progress slider events
             setupProgressBarEvents();
         };
 
+        // Scroll action logic to auto hide navigation
         function setupAutoHideMenu() {
             let lastScrollTop = 0;
             const bottomNav = document.getElementById('bottom-nav');
             
             window.addEventListener('scroll', function() {
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                if (scrollTop > lastScrollTop && scrollTop > 120) {
-                    // Scrolling down - hide nav with nice elastic glide
-                    bottomNav.style.transform = 'translate(-50%, 100px)';
+                if (scrollTop > lastScrollTop && scrollTop > 80) {
+                    bottomNav.style.transform = 'translate(-50%, 120px)';
                     bottomNav.style.opacity = '0';
                 } else {
-                    // Scrolling up - show nav
                     bottomNav.style.transform = 'translate(-50%, 0)';
                     bottomNav.style.opacity = '1';
                 }
@@ -566,6 +544,7 @@
             }, false);
         }
 
+        // Full screen player controller map
         function setupKeyboardControls() {
             document.addEventListener('keydown', function(e) {
                 const lightbox = document.getElementById('video-lightbox');
@@ -585,23 +564,16 @@
         }
 
         function renderApp() {
-            // 1. Update Counts
             document.getElementById('video-count-badge').innerText = videosDatabase.length;
-
-            // 2. Render Main Grid
             renderVideoGrid();
-
-            // 3. Render Search Suggestions & Results
             renderSearchSuggestions();
             filterSearch();
-
-            // 4. Render Tag Categories Grid (Tags view)
             renderTagsView();
         }
 
         function getDaysAgoString(dateString) {
             const uploadDate = new Date(dateString);
-            const currentDate = new Date("2026-07-01"); // Preserving exact reference date
+            const currentDate = new Date("2026-07-01");
             const differenceInTime = currentDate.getTime() - uploadDate.getTime();
             const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
             
@@ -619,7 +591,6 @@
             const emptyState = document.getElementById('empty-state');
             gridContainer.innerHTML = '';
 
-            // Apply Filters (Tag filter)
             let filteredList = [...videosDatabase];
             if (currentTagFilter) {
                 filteredList = filteredList.filter(video => video.tags.includes(currentTagFilter));
@@ -629,16 +600,12 @@
                 document.getElementById('active-tag-indicator').classList.add('hidden');
             }
 
-            // Apply Sort
             if (sortBy === 'date') {
                 filteredList.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
-                document.getElementById('sort-indicator').innerText = "Sıralama: Ən Yeni";
             } else if (sortBy === 'title') {
                 filteredList.sort((a, b) => a.title.localeCompare(b.title));
-                document.getElementById('sort-indicator').innerText = "Sıralama: Başlıq";
             } else if (sortBy === 'favorites') {
                 filteredList = filteredList.filter(v => favorites.includes(v.id));
-                document.getElementById('sort-indicator').innerText = "Sıralama: Favorilər";
             }
 
             if (filteredList.length === 0) {
@@ -650,63 +617,56 @@
                 gridContainer.classList.remove('hidden');
             }
 
-            // Build card structures
-            filteredList.forEach((video, index) => {
+            filteredList.forEach((video) => {
                 const isFavorite = favorites.includes(video.id);
                 const isWatched = watched.includes(video.id);
                 const daysAgoStr = getDaysAgoString(video.uploadDate);
                 
-                // Build dynamic badges for video cards
                 let tagBadgesMarkup = video.tags.map(tag => {
                     const style = tagStyles[tag] || defaultTagStyle;
-                    return `<span onclick="filterByTag('${tag}', event)" class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase cursor-pointer border ${style.bg} ${style.border} ${style.text} hover:scale-105 transition-transform duration-200">${tag}</span>`;
+                    return `<span onclick="filterByTag('${tag}', event)" class="px-2.5 py-1 rounded-[18px] text-[9px] font-bold tracking-wide uppercase cursor-pointer border ${style.bg} ${style.border} ${style.text} hover:scale-105 transition-transform duration-200">${tag}</span>`;
                 }).join('');
 
                 const videoCard = document.createElement('div');
-                videoCard.className = 'bg-zinc-950/40 border border-zinc-900 rounded-3xl p-3.5 space-y-3.5 hover:border-zinc-800 transition-all duration-300 shadow-md group';
+                // Customized precisely to user requested GitHub Dark color scheme: Card: #161b22, Rounded: 18px
+                videoCard.className = 'bg-[#161b22] border border-[#21262d] rounded-[18px] p-4 space-y-3.5 hover:border-[#30363d] transition-all duration-300 shadow-md group overflow-hidden';
                 videoCard.innerHTML = `
-                    <!-- Thumbnail Container with Hover overlay -->
-                    <div onclick="openLightbox('${video.id}')" class="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group bg-zinc-900 shadow-inner">
-                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/18181b/ffffff?text=VibeEdit'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity"></div>
+                    <div onclick="openLightbox('${video.id}')" class="relative aspect-video rounded-[18px] overflow-hidden cursor-pointer group bg-[#0d1117] shadow-inner">
+                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/161b22/ffffff?text=K.A.D.R'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-85 group-hover:opacity-40 transition-opacity"></div>
                         
-                        <!-- Watch & Play Status over Video Thumb -->
                         <div class="absolute top-3 left-3 flex gap-1.5">
                             ${isWatched ? `
-                                <span class="px-2 py-0.5 bg-green-500/95 backdrop-blur text-white text-[9px] font-black rounded-lg shadow-lg flex items-center gap-0.5 animate-pulse">
+                                <span class="px-2 py-0.5 bg-emerald-600/90 backdrop-blur text-white text-[9px] font-black rounded-[18px] shadow-lg flex items-center gap-0.5 animate-pulse">
                                     ✓ İZLƏNDİ
                                 </span>
                             ` : ''}
-                            <span class="px-2 py-0.5 bg-zinc-900/90 backdrop-blur text-zinc-300 text-[9px] font-bold rounded-lg shadow-lg">
+                            <span class="px-2 py-0.5 bg-black/60 backdrop-blur text-zinc-300 text-[9px] font-bold rounded-[18px] shadow-lg">
                                 ${daysAgoStr}
                             </span>
                         </div>
 
-                        <!-- Mini Glass Play Center Button -->
                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <div class="w-12 h-12 rounded-full glass flex items-center justify-center text-white scale-90 group-hover:scale-100 transition-transform duration-300">
-                                <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Meta Data and Interactive Controls -->
                     <div class="space-y-2">
                         <div class="flex items-start justify-between gap-3">
-                            <h3 onclick="openLightbox('${video.id}')" class="font-bold text-sm text-zinc-100 hover:text-rose-400 cursor-pointer transition-colors leading-snug flex-1 truncate">
+                            <h3 onclick="openLightbox('${video.id}')" class="font-bold text-sm text-zinc-100 hover:text-zinc-300 cursor-pointer transition-colors leading-snug flex-1 truncate">
                                 ❤️ ${video.title}
                             </h3>
-                            <div class="flex items-center gap-1.5">
-                                <!-- Favorite Action -->
-                                <button onclick="toggleFavorite('${video.id}', event)" class="p-1.5 rounded-full hover:bg-zinc-800 text-zinc-500 transition-colors" title="Bəyən">
-                                    <svg class="w-5 h-5 ${isFavorite ? 'text-rose-500 fill-rose-500' : 'text-zinc-500 hover:text-rose-500'}" fill="${isFavorite ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="flex items-center gap-1">
+                                <button onclick="toggleFavorite('${video.id}', event)" class="p-1.5 rounded-full hover:bg-[#21262d] text-zinc-500 transition-colors">
+                                    <svg class="w-5 h-5 ${isFavorite ? 'text-[#b01a2e] fill-[#b01a2e]' : 'text-zinc-500 hover:text-[#b01a2e]'}" fill="${isFavorite ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
                                 </button>
-                                <!-- Share Action -->
-                                <button onclick="shareVideoDirect('${video.id}', event)" class="p-1.5 rounded-full hover:bg-zinc-800 text-zinc-500 hover:text-blue-400 transition-colors" title="Paylaş">
+                                <button onclick="shareVideoDirect('${video.id}', event)" class="p-1.5 rounded-full hover:bg-[#21262d] text-zinc-500 hover:text-blue-400 transition-colors">
                                     <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 10.742l4.832-2.416m0 4.348l-4.832 2.416m-4.832-2.416a3 3 0 115.367-1.484 3 3 0 01-5.367 1.484zm10.602-5.46a3 3 0 115.368-1.484 3 3 0 01-5.368 1.484zm0 10.92a3 3 0 115.368-1.484 3 3 0 01-5.368 1.484z" />
                                     </svg>
@@ -714,7 +674,6 @@
                             </div>
                         </div>
 
-                        <!-- Tag List row -->
                         <div class="flex flex-wrap gap-1.5 pt-0.5">
                             ${tagBadgesMarkup}
                         </div>
@@ -728,9 +687,7 @@
             const container = document.getElementById('tags-category-grid');
             container.innerHTML = '';
 
-            // Calculate video count per tags
             const tagCounts = {};
-            // Init keys
             Object.keys(tagStyles).forEach(tag => tagCounts[tag] = 0);
             
             videosDatabase.forEach(video => {
@@ -739,7 +696,6 @@
                 });
             });
 
-            // Generate category cards
             Object.keys(tagStyles).forEach(tag => {
                 const count = tagCounts[tag] || 0;
                 const style = tagStyles[tag];
@@ -749,18 +705,18 @@
                     filterByTag(tag);
                     switchTab('home');
                 };
-                card.className = `glass cursor-pointer p-4 rounded-3xl border border-zinc-900 hover:border-zinc-700 transition-all duration-300 shadow-md ${style.glow} flex flex-col justify-between h-28 group`;
+                card.className = `glass cursor-pointer p-4 rounded-[18px] border border-[#21262d] hover:border-[#30363d] transition-all duration-300 shadow-md ${style.glow} flex flex-col justify-between h-28 group`;
                 card.innerHTML = `
                     <div class="flex items-center justify-between">
                         <span class="text-xl group-hover:scale-110 transition-transform duration-300">
                             ${tag === 'film-edit' ? '🎬' : tag === 'couple-edit' ? '❤️' : tag === 'crush-list' ? '⭐' : '🎨'}
                         </span>
-                        <span class="text-[10px] font-extrabold ${style.text} px-2 py-0.5 rounded-full ${style.bg} border ${style.border}">
+                        <span class="text-[9px] font-extrabold ${style.text} px-2.5 py-0.5 rounded-full ${style.bg} border ${style.border}">
                             ${count} Video
                         </span>
                     </div>
                     <div>
-                        <h3 class="text-sm font-black text-zinc-100 tracking-tight group-hover:text-rose-400 transition-colors">${style.label}</h3>
+                        <h3 class="text-xs font-black text-zinc-100 tracking-tight group-hover:text-zinc-300 transition-colors">${style.label}</h3>
                         <p class="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mt-0.5">#${tag}</p>
                     </div>
                 `;
@@ -779,7 +735,7 @@
                     document.getElementById('search-input').value = tag;
                     handleSearch(tag);
                 };
-                pill.className = `px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${style.bg} ${style.border} ${style.text} hover:scale-105`;
+                pill.className = `px-3 py-1.5 rounded-[18px] text-[10px] font-bold border transition-all ${style.bg} ${style.border} ${style.text} hover:scale-105`;
                 pill.innerText = style.label;
                 container.appendChild(pill);
             });
@@ -800,7 +756,7 @@
             const input = document.getElementById('search-input');
             input.value = '';
             searchQuery = '';
-            document.getElementById('btn-search-clear').add('hidden');
+            document.getElementById('btn-search-clear').classList.add('hidden');
             filterSearch();
             input.focus();
         }
@@ -830,24 +786,22 @@
                 return;
             }
 
-            // Create thin lightweight search result items
             matches.forEach(video => {
-                const isFavorite = favorites.includes(video.id);
                 const daysAgoStr = getDaysAgoString(video.uploadDate);
 
                 const item = document.createElement('div');
-                item.className = 'flex items-center gap-3 bg-zinc-950/40 border border-zinc-900 p-2.5 rounded-2xl hover:border-zinc-800 transition-all cursor-pointer';
+                item.className = 'flex items-center gap-3 bg-[#161b22] border border-[#21262d] p-2.5 rounded-[18px] hover:border-[#30363d] transition-all cursor-pointer';
                 item.onclick = () => openLightbox(video.id);
                 item.innerHTML = `
-                    <div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900 flex-shrink-0">
-                        <img src="${video.thumbnail}" alt="" class="w-full h-full object-cover">
+                    <div class="w-14 h-14 rounded-[18px] overflow-hidden bg-[#0d1117] flex-shrink-0">
+                        <img src="${video.thumbnail}" alt="" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150/161b22/ffffff?text=K.A.D.R'">
                     </div>
                     <div class="flex-1 min-w-0">
                         <h4 class="text-xs font-bold text-zinc-200 truncate">${video.title}</h4>
                         <div class="flex items-center gap-1.5 mt-1">
                             <span class="text-[9px] text-zinc-500">${daysAgoStr}</span>
                             <span class="text-[9px] text-zinc-500">•</span>
-                            <span class="text-[9px] text-rose-400 font-bold">${video.tags.join(', ')}</span>
+                            <span class="text-[9px] text-[#1a64a0] font-bold">${video.tags.join(', ')}</span>
                         </div>
                     </div>
                     <div class="text-zinc-500 pr-2">
@@ -863,30 +817,26 @@
         function switchTab(tabId) {
             currentTab = tabId;
 
-            // Hide all tabs
             document.getElementById('tab-home').classList.add('hidden');
             document.getElementById('tab-search').classList.add('hidden');
             document.getElementById('tab-tags').classList.add('hidden');
 
-            // Show active tab
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
 
-            // Reset navigation tab visual styles
             const navs = ['home', 'search', 'tags'];
             navs.forEach(nav => {
                 const btn = document.getElementById(`nav-${nav}`);
                 const bg = document.getElementById(`nav-icon-${nav}-bg`);
                 
                 if (nav === tabId) {
-                    btn.className = "flex flex-col items-center gap-1 group text-rose-500 transition-colors";
-                    bg.className = "w-10 h-10 rounded-full flex items-center justify-center transition-all bg-rose-500/10 scale-105";
+                    btn.className = "flex flex-col items-center gap-1 group text-[#b01a2e] transition-colors";
+                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105";
                 } else {
                     btn.className = "flex flex-col items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors";
-                    bg.className = "w-10 h-10 rounded-full flex items-center justify-center transition-all";
+                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all";
                 }
             });
 
-            // If tag tab, render tags
             if (tabId === 'tags') {
                 renderTagsView();
             }
@@ -894,7 +844,7 @@
 
         function filterByTag(tagName, event) {
             if (event) {
-                event.stopPropagation(); // Avoid triggering lightbox overlay
+                event.stopPropagation();
             }
             currentTagFilter = tagName;
             renderApp();
@@ -908,17 +858,6 @@
 
         function changeSort(type) {
             sortBy = type;
-
-            const buttons = ['date', 'title', 'favorites'];
-            buttons.forEach(btn => {
-                const button = document.getElementById(`btn-sort-${btn}`);
-                if (btn === type) {
-                    button.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-zinc-900 text-rose-400 border border-rose-500/10";
-                } else {
-                    button.className = "px-3 py-1.5 rounded-xl text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200";
-                }
-            });
-
             renderVideoGrid();
         }
 
@@ -926,9 +865,9 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             
-            const colorClass = type === 'success' ? 'border-emerald-500/30 text-emerald-300 bg-emerald-950/80' : 'border-rose-500/30 text-rose-300 bg-rose-950/80';
+            const colorClass = type === 'success' ? 'border-[#257a3e]/30 text-[#257a3e] bg-[#257a3e]/10' : 'border-[#b01a2e]/30 text-[#b01a2e] bg-[#b01a2e]/10';
             
-            toast.className = `glass p-3.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-2xl animate-scale-up border ${colorClass}`;
+            toast.className = `glass p-3 rounded-[18px] text-[11px] font-bold flex items-center gap-2 shadow-2xl animate-scale-up border ${colorClass}`;
             toast.innerHTML = `
                 <span>${type === 'success' ? '💡' : '⚡'}</span>
                 <span>${message}</span>
@@ -943,7 +882,7 @@
                 setTimeout(() => {
                     toast.remove();
                 }, 300);
-            }, 2500);
+            }, 2200);
         }
 
         function toggleFavorite(id, event) {
@@ -958,14 +897,14 @@
                 showToast("Favorilərə əlavə edildi!", "success");
             }
 
-            localStorage.setItem('vibe_favorites', JSON.stringify(favorites));
+            localStorage.setItem('kadr_favorites', JSON.stringify(favorites));
             renderApp();
         }
 
         function markAsWatched(id) {
             if (!watched.includes(id)) {
                 watched.push(id);
-                localStorage.setItem('vibe_watched', JSON.stringify(watched));
+                localStorage.setItem('kadr_watched', JSON.stringify(watched));
                 renderApp();
             }
         }
@@ -980,38 +919,28 @@
             const videoElement = document.getElementById('main-video-player');
             const source = document.getElementById('video-source');
 
-            // Mark watched
             markAsWatched(activeVideo.id);
 
-            // Set media parameters
             source.src = activeVideo.file;
             videoElement.load();
             
-            // Set details info
             document.getElementById('player-title').innerText = activeVideo.title;
             document.getElementById('player-blur-bg').style.backgroundImage = `url('${activeVideo.thumbnail}')`;
             document.getElementById('player-days-ago').innerText = getDaysAgoString(activeVideo.uploadDate);
 
-            // Dynamic badges inside player
             const tagsCont = document.getElementById('player-tags');
             tagsCont.innerHTML = activeVideo.tags.map(tag => {
                 const style = tagStyles[tag] || defaultTagStyle;
-                return `<span class="px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider border ${style.bg} ${style.border} ${style.text}">${tag}</span>`;
+                return `<span class="px-2.5 py-1 rounded-[18px] text-[9px] font-bold uppercase tracking-wider border ${style.bg} ${style.border} ${style.text}">${tag}</span>`;
             }).join('');
 
-            // Favorite status inside player
             updatePlayerFavoriteBtn();
-
-            // Watched badge
             document.getElementById('player-watched-badge').classList.remove('hidden');
 
-            // Open overlay with elegant scale up animations
             lightbox.classList.remove('hidden');
             setTimeout(() => {
                 lightbox.classList.remove('opacity-0');
-                // Auto play
                 videoElement.play().catch(() => {
-                    // Browser blocked autoplay with audio, auto mute
                     videoElement.muted = true;
                     isMuted = true;
                     updateMuteUI();
@@ -1026,7 +955,6 @@
             const videoElement = document.getElementById('main-video-player');
             
             videoElement.pause();
-            
             lightbox.classList.add('opacity-0');
             setTimeout(() => {
                 lightbox.classList.add('hidden');
@@ -1052,12 +980,10 @@
             const overlay = document.getElementById('play-pause-overlay');
 
             if (isPlaying) {
-                // Changing to Pause icon representation
                 giantPlay.innerHTML = `<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />`;
                 playIcon.innerHTML = `<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />`;
                 overlay.style.opacity = '0';
             } else {
-                // Changing to Play icon representation
                 giantPlay.innerHTML = `<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />`;
                 playIcon.innerHTML = `<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />`;
                 overlay.style.opacity = '1';
@@ -1074,10 +1000,8 @@
         function updateMuteUI() {
             const muteIcon = document.getElementById('mute-icon-svg');
             if (isMuted) {
-                // Muted icon path
                 muteIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />`;
             } else {
-                // High volume icon path
                 muteIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />`;
             }
         }
@@ -1097,7 +1021,6 @@
                 }
             });
 
-            // Loop back when completed automatically
             video.addEventListener('ended', () => {
                 video.currentTime = 0;
                 video.play();
@@ -1128,7 +1051,7 @@
 
             let nextIndex = activeVideoIndex + 1;
             if (nextIndex >= videosDatabase.length) {
-                nextIndex = 0; // Infinite roll loop
+                nextIndex = 0;
             }
             openLightbox(videosDatabase[nextIndex].id);
         }
@@ -1139,7 +1062,7 @@
 
             let prevIndex = activeVideoIndex - 1;
             if (prevIndex < 0) {
-                prevIndex = videosDatabase.length - 1; // Infinite roll loop
+                prevIndex = videosDatabase.length - 1;
             }
             openLightbox(videosDatabase[prevIndex].id);
         }
@@ -1156,9 +1079,9 @@
             const isFavorite = favorites.includes(activeVideo.id);
 
             if (isFavorite) {
-                favSvg.classList.add('text-rose-500', 'fill-rose-500');
+                favSvg.classList.add('text-[#b01a2e]', 'fill-[#b01a2e]');
             } else {
-                favSvg.classList.remove('text-rose-500', 'fill-rose-500');
+                favSvg.classList.remove('text-[#b01a2e]', 'fill-[#b01a2e]');
                 favSvg.classList.add('text-zinc-400');
             }
         }
@@ -1168,10 +1091,8 @@
             const video = videosDatabase.find(v => v.id === id);
             if (!video) return;
 
-            // Generate shared path simulation
             const fakeUrl = `${window.location.origin}${window.location.pathname}?video=${video.id}`;
             
-            // Temporary copy action (Standard execCommand to bypass iframe limits)
             const el = document.createElement('textarea');
             el.value = fakeUrl;
             document.body.appendChild(el);
@@ -1195,29 +1116,26 @@
 
         function setSourceMode(mode) {
             currentSourceMode = mode;
-            localStorage.setItem('vibe_source_mode', mode);
+            localStorage.setItem('kadr_source_mode', mode);
 
-            // Toggle state button interfaces
             const demoBtn = document.getElementById('btn-mode-demo');
             const localBtn = document.getElementById('btn-mode-local');
 
             if (mode === 'demo') {
-                demoBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold transition-all bg-rose-500 text-white";
-                localBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-white";
+                demoBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all bg-[#1a64a0] text-white";
+                localBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all text-zinc-400 hover:text-white";
                 videosDatabase = [...demoVideos];
             } else {
-                localBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold transition-all bg-rose-500 text-white";
-                demoBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-white";
+                localBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all bg-[#1a64a0] text-white";
+                demoBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all text-zinc-400 hover:text-white";
                 videosDatabase = [...localVideos];
             }
 
-            // Reload application components
             renderApp();
             showToast(`Mənbə dəyişdirildi: ${mode === 'demo' ? 'Online Demo' : 'Local GitHub Folders'}`);
         }
 
         function updateJsonPreview() {
-            // Generate clean copy of videos json config matching user requirements
             const jsonSchema = [
                 {
                     "title": "Your Name Edit",
