@@ -84,6 +84,7 @@
                 <span class="r-color">R</span>
             </div>
 
+            <!-- Fix SVG coordinates path to completely bypass parsing error -->
             <div class="flex items-center gap-2">
                 <button onclick="toggleDevSuite()" class="glass px-2.5 py-1.5 rounded-[18px] text-[11px] text-zinc-400 hover:text-rose-400 flex items-center gap-1 transition-all">
                     <svg class="w-3.5 h-3.5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -104,7 +105,6 @@
                 Videoları pulsuz və limitsiz saxlamaq üçün <strong>Cloudflare R2</strong>, verilənlər bazası üçün isə <strong>Supabase</strong> istifadə olunur. Bu optimal həll gələcəkdə minlərlə video üçün ən sərfəli və sürətli variantdır.
             </p>
 
-            <!-- SQL struktur bölməsi -->
             <div class="bg-[#0d1117] p-3 rounded-[18px] border border-[#21262d] mb-4">
                 <div class="flex justify-between items-center mb-1.5">
                     <h4 class="text-xs font-bold text-zinc-300">📋 Supabase SQL Cədvəl Kodu</h4>
@@ -120,7 +120,6 @@ create table public.videos (
 );</pre>
             </div>
 
-            <!-- API Qoşulma Paneli -->
             <div class="bg-[#0d1117] p-3 rounded-[18px] border border-[#21262d] mb-4">
                 <h4 class="text-xs font-bold text-zinc-300 mb-2 flex items-center gap-1.5">
                     <span>⚙️</span> Supabase & Cloudflare Konfiqurasiyası
@@ -138,7 +137,6 @@ create table public.videos (
                 </div>
             </div>
 
-            <!-- Video Əlavəetmə Formu -->
             <div id="cms-video-form-container" class="bg-[#0d1117] p-3 rounded-[18px] border border-[#21262d] mb-4 opacity-50 pointer-events-none">
                 <h4 class="text-xs font-bold text-zinc-300 mb-2">📥 Yeni Cloudflare Videosu Əlavə Et</h4>
                 <div class="space-y-2 text-xs">
@@ -166,7 +164,6 @@ create table public.videos (
 
             <section id="tab-home" class="relative h-full">
 
-                <!-- Filtrləmə düymələri və aktiv tag göstəricisi -->
                 <div class="absolute top-3 inset-x-3 z-20 space-y-2 pointer-events-none">
                     <div class="pointer-events-auto flex items-center justify-center gap-1.5 glass p-1.5 rounded-[18px] border border-[#21262d] w-fit mx-auto">
                         <button onclick="changeSort('foryou')" id="btn-sort-foryou" class="px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-[#b01a2e] border border-[#b01a2e]/20 shadow-lg">
@@ -190,7 +187,6 @@ create table public.videos (
                     </div>
                 </div>
 
-                <!-- Skeleton Loader -->
                 <div id="skeleton-loader" class="h-full flex items-center justify-center px-6">
                     <div class="w-full max-w-xs bg-[#161b22] border border-[#21262d] rounded-[18px] p-4 space-y-4 animate-pulse">
                         <div class="aspect-[9/16] bg-[#30363d] rounded-[18px]"></div>
@@ -198,10 +194,8 @@ create table public.videos (
                     </div>
                 </div>
 
-                <!-- Əsas Video Grid -->
                 <div id="video-grid" class="hidden h-full overflow-y-scroll snap-y snap-mandatory no-scrollbar"></div>
 
-                <!-- Boş ekran vəziyyəti -->
                 <div id="empty-state" class="hidden h-full flex flex-col items-center justify-center text-center space-y-4 px-6">
                     <div class="w-16 h-16 bg-[#161b22] rounded-full flex items-center justify-center mx-auto border border-[#21262d] text-zinc-500 text-2xl">
                         🎬
@@ -247,7 +241,7 @@ create table public.videos (
                     <h2 class="text-lg font-black tracking-tight text-zinc-100 flex items-center gap-2">
                         <span>📂</span> Bütün Kateqoriyalar
                     </h2>
-                    <p class="text-xs text-zinc-400">Müxtəlif mövzularda hazırlanmış sehrli dünyanı kəşf edin.</p>
+                    <p class="text-xs text-zinc-400">Müxtəlif mövzularda hazırlanmış sehirli dünyanı kəşf edin.</p>
                 </div>
 
                 <div id="tags-category-grid" class="grid grid-cols-2 gap-3.5"></div>
@@ -291,7 +285,6 @@ create table public.videos (
 
         <div class="relative w-full max-w-lg h-full max-h-screen flex flex-col justify-between items-center z-10 py-6 px-4">
 
-            <!-- Üst idarəetmə hissəsi -->
             <div class="w-full flex items-center justify-between glass px-4 py-3 rounded-[18px] border border-white/5 z-20">
                 <button onclick="closeLightbox()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors text-white">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -314,12 +307,11 @@ create table public.videos (
                 </div>
             </div>
 
-            <!-- Video çərçivə sahəsi və donmaya qarşı tənzimlənən pleyer -->
             <div class="w-full flex-1 flex items-center justify-center relative my-4">
                 <div class="relative max-w-full max-h-[70vh] bg-black/40 rounded-[18px] overflow-hidden border border-white/5 flex items-center justify-center group" id="video-wrapper" style="aspect-ratio: 9 / 16;">
                     
                     <div id="player-loading-spinner" class="absolute inset-0 flex items-center justify-center bg-black/60 z-30 transition-opacity duration-200 hidden">
-                        <div class="w-12 h-12 border-4 border-[#b01a2e] border-t-transparent rounded-full animate-spin"></div>
+                        <div class="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
                     </div>
 
                     <video id="main-video-player" playsinline class="w-full h-full object-contain cursor-pointer">
@@ -346,7 +338,6 @@ create table public.videos (
                 </div>
             </div>
 
-            <!-- Alt tənzimləmələr paneli və progress bar -->
             <div class="w-full glass p-4 rounded-[18px] border border-white/5 space-y-3.5 z-20">
                 <div class="space-y-1">
                     <div class="relative w-full h-1 bg-zinc-800 rounded-full overflow-hidden cursor-pointer" id="progress-container" onclick="seekVideo(event)">
@@ -386,7 +377,6 @@ create table public.videos (
                 <div id="player-tags" class="flex flex-wrap gap-1.5 pt-1"></div>
             </div>
 
-            <!-- Klaviatura təlimatları -->
             <div class="text-center text-[9px] text-zinc-500 font-bold flex items-center gap-3">
                 <span>← Sol ox (Əvvəlki)</span>
                 <span>• Space (Dayandır) •</span>
@@ -396,7 +386,7 @@ create table public.videos (
     </div>
 
     <script>
-        // Sizin Cloudflare R2 daxilindəki real qovluq və video siyahınızın tam xəritəsi
+        // Mount all variables globally to prevent duplicate "already declared" identifier errors
         window.demoVideos = [
             {
                 "id": "vid-from-1",
@@ -1184,8 +1174,8 @@ create table public.videos (
                 const bg = document.getElementById(`nav-icon-${nav}-bg`);
 
                 if (nav === tabId) {
-                    btn.className = "flex flex-col items-center gap-1 group text-rose-500 transition-colors";
-                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all bg-rose-500/10 scale-105";
+                    btn.className = "flex flex-col items-center gap-1 group text-[#b01a2e] transition-colors";
+                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105";
                 } else {
                     btn.className = "flex flex-col items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors";
                     bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all";
