@@ -285,7 +285,7 @@
             </div>
 
             <div class="w-full flex-1 flex items-center justify-center relative my-4">
-                <div class="relative max-w-full max-h-[70vh] aspect-[9/16] bg-black/40 rounded-[18px] overflow-hidden border border-white/5 flex items-center justify-center group" id="video-wrapper">
+                <div class="relative max-w-full max-h-[70vh] bg-black/40 rounded-[18px] overflow-hidden border border-white/5 flex items-center justify-center group" id="video-wrapper" style="aspect-ratio: 9 / 16;">
                     <video id="main-video-player" playsinline class="w-full h-full object-contain cursor-pointer">
                         <source id="video-source" src="" type="video/mp4">
                     </video>
@@ -621,7 +621,7 @@
                 const slide = document.createElement('div');
                 slide.className = 'feed-slide relative w-full h-full snap-start bg-black flex-shrink-0';
                 slide.innerHTML = `
-                    <video class="feed-video absolute inset-0 w-full h-full object-cover" data-id="${video.id}" loop playsinline preload="metadata" onclick="toggleFeedPlay('${video.id}')">
+                    <video class="feed-video absolute inset-0 w-full h-full object-contain bg-black" data-id="${video.id}" loop playsinline preload="metadata" onclick="toggleFeedPlay('${video.id}')">
                         <source src="${video.file}" type="video/mp4">
                     </video>
 
@@ -994,7 +994,9 @@
             // Reset previous listeners/state so retries don't stack up
             videoElement.oncanplay = null;
             videoElement.onerror = null;
+            videoElement.onloadedmetadata = null;
             videoElement.pause();
+            document.getElementById('video-wrapper').style.aspectRatio = '9 / 16';
             videoElement.muted = false;
             isMuted = false;
             updateMuteUI();
@@ -1029,6 +1031,12 @@
             videoElement.oncanplay = () => {
                 if (videoElement.paused) {
                     attemptPlayWithSound(videoElement);
+                }
+            };
+            videoElement.onloadedmetadata = () => {
+                const wrapper = document.getElementById('video-wrapper');
+                if (videoElement.videoWidth && videoElement.videoHeight) {
+                    wrapper.style.aspectRatio = `${videoElement.videoWidth} / ${videoElement.videoHeight}`;
                 }
             };
             videoElement.onerror = () => {
@@ -1066,6 +1074,7 @@
 
             videoElement.oncanplay = null;
             videoElement.onerror = null;
+            videoElement.onloadedmetadata = null;
             videoElement.pause();
             lightbox.classList.add('opacity-0');
             setTimeout(() => {
