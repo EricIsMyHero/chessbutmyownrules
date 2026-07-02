@@ -364,7 +364,6 @@
                 "id": "vid-1",
                 "title": "Your Name Edit • Kimino nawa",
                 "file": "https://assets.mixkit.co/videos/preview/mixkit-holding-hands-and-walking-in-a-snowy-forest-34407-large.mp4",
-                "thumbnail": "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=80",
                 "tags": ["film-edit", "couple-edit"],
                 "uploadDate": "2026-06-29"
             },
@@ -372,7 +371,6 @@
                 "id": "vid-2",
                 "title": "Anime Evening Vibe",
                 "file": "https://assets.mixkit.co/videos/preview/mixkit-cyberpunk-tokyo-street-with-neon-lights-and-rain-34311-large.mp4",
-                "thumbnail": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=80",
                 "tags": ["normal-edit", "crush-list"],
                 "uploadDate": "2026-06-25"
             },
@@ -380,7 +378,6 @@
                 "id": "vid-3",
                 "title": "Crush List Special - Tokyo Rain",
                 "file": "https://assets.mixkit.co/videos/preview/mixkit-woman-walking-alone-at-night-on-a-city-street-42289-large.mp4",
-                "thumbnail": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&auto=format&fit=crop&q=80",
                 "tags": ["crush-list"],
                 "uploadDate": "2026-06-12"
             },
@@ -388,7 +385,6 @@
                 "id": "vid-4",
                 "title": "Lo-Fi Couple Dreamscape",
                 "file": "https://assets.mixkit.co/videos/preview/mixkit-people-celebrating-with-sparklers-at-night-42250-large.mp4",
-                "thumbnail": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&auto=format&fit=crop&q=80",
                 "tags": ["couple-edit"],
                 "uploadDate": "2026-06-01"
             },
@@ -396,7 +392,6 @@
                 "id": "vid-5",
                 "title": "Cinematic Movie Compilation",
                 "file": "https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-32128-large.mp4",
-                "thumbnail": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80",
                 "tags": ["film-edit", "normal-edit"],
                 "uploadDate": "2026-05-20"
             }
@@ -611,7 +606,7 @@
                 const slide = document.createElement('div');
                 slide.className = 'feed-slide relative w-full h-full snap-start bg-black flex-shrink-0';
                 slide.innerHTML = `
-                    <video class="feed-video absolute inset-0 w-full h-full object-cover" data-id="${video.id}" loop playsinline preload="metadata" poster="${video.thumbnail}" onclick="toggleFeedPlay('${video.id}')">
+                    <video class="feed-video absolute inset-0 w-full h-full object-cover" data-id="${video.id}" loop playsinline preload="metadata" onclick="toggleFeedPlay('${video.id}')">
                         <source src="${video.file}" type="video/mp4">
                     </video>
 
@@ -851,7 +846,7 @@
                 item.onclick = () => openLightbox(video.id);
                 item.innerHTML = `
                     <div class="w-14 h-14 rounded-[18px] overflow-hidden bg-[#0d1117] flex-shrink-0">
-                        <img src="${video.thumbnail}" alt="" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150/161b22/ffffff?text=K.A.D.R'">
+                        <video src="${video.file}" class="w-full h-full object-cover" muted preload="metadata"></video>
                     </div>
                     <div class="flex-1 min-w-0">
                         <h4 class="text-xs font-bold text-zinc-200 truncate">${video.title}</h4>
@@ -985,7 +980,7 @@
             videoElement.load();
 
             document.getElementById('player-title').innerText = activeVideo.title;
-            document.getElementById('player-blur-bg').style.backgroundImage = `url('${activeVideo.thumbnail}')`;
+            document.getElementById('player-blur-bg').style.backgroundImage = '';
             document.getElementById('player-days-ago').innerText = getDaysAgoString(activeVideo.uploadDate);
 
             const tagsCont = document.getElementById('player-tags');
@@ -1198,7 +1193,6 @@
                     "id": "local-1",
                     "title": "Obsession Edit",
                     "file": "videos/obsession/normal-edit-1.mp4",
-                    "thumbnail": "thumbnails/edit1.jpg",
                     "tags": ["film-edit", "obsession"],
                     "uploadDate": "2026-07-02"
                 },
@@ -1206,7 +1200,6 @@
                     "id": "local-2",
                     "title": "The Amazing Digital Circus Edit",
                     "file": "videos/the-amazing-digital-circus/couple-edit-1.mp4",
-                    "thumbnail": "thumbnails/edit6.jpg",
                     "tags": ["film-edit", "the-amazing-digital-circus", "couple-edit"],
                     "uploadDate": "2026-07-02"
                 },
@@ -1214,7 +1207,6 @@
                     "id": "local-3",
                     "title": "Toy Story Edit",
                     "file": "videos/toy-story/normal-edit-1.mp4",
-                    "thumbnail": "thumbnails/edit12.jpg",
                     "tags": ["film-edit", "toy-story"],
                     "uploadDate": "2026-07-02"
                 }
