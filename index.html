@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>K.A.D.R Premium Video Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Loading Supabase JS Client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
@@ -80,7 +79,7 @@
         .feed-slide { scroll-snap-align: start; scroll-snap-stop: always; }
     </style>
 </head>
-<body class="bg-[#0d1117] text-zinc-100 h-screen font-sans flex flex-col overflow-hidden selection:bg-[#1a64a0]/30 selection:text-white">
+<body class="bg-[#0d1117] text-zinc-100 h-screen font-sans flex flex-col overflow-hidden selection:bg-rose-500/20 selection:text-rose-200">
 
     <div id="toast-container" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2"></div>
 
@@ -95,8 +94,8 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <button onclick="toggleDevSuite()" class="glass px-2.5 py-1.5 rounded-[18px] text-[11px] text-zinc-400 hover:text-emerald-400 flex items-center gap-1 transition-all">
-                    <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button onclick="toggleDevSuite()" class="glass px-2.5 py-1.5 rounded-[18px] text-[11px] text-zinc-400 hover:text-rose-400 flex items-center gap-1 transition-all">
+                    <svg class="w-3.5 h-3.5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
                     <span>R2 + Supabase CMS</span>
@@ -109,101 +108,55 @@
         </header>
 
         <div id="dev-suite" class="hidden fixed inset-x-0 top-[58px] max-w-lg mx-auto z-40 bg-[#161b22]/98 border-b border-[#21262d] p-5 animate-slide-up backdrop-blur-xl max-h-[82vh] overflow-y-auto no-scrollbar">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2">⚡ Cloudflare R2 + Supabase Hibrid CMS</h3>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-rose-500 mb-2">⚡ Cloudflare R2 + Supabase Hibrid CMS</h3>
             <p class="text-[11px] text-zinc-400 mb-4 leading-relaxed">
-                Faylları saxlamaq üçün <strong>Cloudflare R2</strong> (10GB Pulsuz, Sıfır Trafik haqqı) və verilənlər bazası üçün <strong>Supabase</strong> istifadə edin. Bu, minlərlə video üçün ən optimal və sərfəli həlldir.
+                Videoları pulsuz saxlamaq üçün <strong>Cloudflare R2</strong> (10GB Pulsuz, Sıfır Trafik haqqı) və verilənlər bazası üçün <strong>Supabase</strong> istifadə edin. Bu, minlərlə video üçün ən optimal və sərfəli həlldir.
             </p>
 
             <!-- SQL Cədvəl strukturu -->
             <div class="bg-[#0d1117] p-3 rounded-[18px] border border-[#21262d] mb-4">
                 <div class="flex justify-between items-center mb-1.5">
                     <h4 class="text-xs font-bold text-zinc-300">📋 Supabase SQL Cədvəl Kodu</h4>
-                    <button onclick="copyText('sql-schema-box', 'SQL kodu kopyalandı! 📋')" class="text-[9px] text-emerald-400 hover:underline">Kopyala</button>
+                    <button onclick="copyText('sql-schema-box', 'SQL kodu kopyalandı! 📋')" class="text-[9px] text-rose-400 hover:underline">Kopyala</button>
                 </div>
                 <pre class="bg-black/30 p-2 rounded-lg text-[9px] text-zinc-400 font-mono overflow-x-auto max-h-24 select-all" id="sql-schema-box">
 create table public.videos (
   id uuid default gen_random_uuid() primary key,
   title text not null,
-  file text not null, -- Bura R2 linki yazılacaq
+  file text not null, -- Bura Cloudflare linki və ya qovluq yolu yazılacaq
   tags text[] not null default '{}',
   uploadDate date not null default current_date
 );</pre>
             </div>
 
-            <!-- Cloudflare Worker Skripti -->
-            <div class="bg-[#0d1117] p-3 rounded-[18px] border border-[#21262d] mb-4">
-                <div class="flex justify-between items-center mb-1.5">
-                    <h4 class="text-xs font-bold text-zinc-300">🛠️ R2 Direct Upload için Cloudflare Worker</h4>
-                    <button onclick="copyText('worker-code-box', 'Worker kodu kopyalandı! 🛠️')" class="text-[9px] text-emerald-400 hover:underline">Kopyala</button>
-                </div>
-                <pre class="bg-black/30 p-2 rounded-lg text-[9px] text-zinc-400 font-mono overflow-x-auto max-h-24 select-all" id="worker-code-box">
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-    const key = url.searchParams.get("key");
-    if (!key) return new Response("Missing key", { status: 400 });
-
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "PUT, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    };
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
-    }
-
-    if (request.method === "PUT") {
-      await env.MY_R2_BUCKET.put(key, request.body);
-      return new Response("OK", { headers: corsHeaders });
-    }
-    return new Response("Method not allowed", { status: 405 });
-  }
-};</pre>
-            </div>
-
             <!-- API Qoşulma Paneli -->
             <div class="bg-[#0d1117] p-3 rounded-[18px] border border-[#21262d] mb-4">
                 <h4 class="text-xs font-bold text-zinc-300 mb-2 flex items-center gap-1.5">
-                    <span>⚙️</span> Supabase & R2 Konfiqurasiyası
+                    <span>⚙️</span> Supabase & Cloudflare Konfiqurasiyası
                 </h4>
                 <div class="space-y-2 text-xs">
-                    <input type="text" id="supabase-url-input" placeholder="Supabase Project URL (məs: https://xxx.supabase.co)" class="w-full bg-[#161b22] border border-[#21262d] rounded-lg p-2 font-mono text-zinc-300 focus:outline-none focus:border-emerald-500">
-                    <input type="password" id="supabase-key-input" placeholder="Supabase Anon API Key" class="w-full bg-[#161b22] border border-[#21262d] rounded-lg p-2 font-mono text-zinc-300 focus:outline-none focus:border-emerald-500">
-                    <input type="text" id="r2-public-url" placeholder="R2 Public Bucket URL (məs: https://pub-xxx.r2.dev)" class="w-full bg-[#161b22] border border-[#21262d] rounded-lg p-2 font-mono text-zinc-300 focus:outline-none focus:border-emerald-500">
-                    <input type="text" id="cf-worker-url" placeholder="İstəyə bağlı: Cloudflare Worker URL (Yükləmək üçün)" class="w-full bg-[#161b22] border border-[#21262d] rounded-lg p-2 font-mono text-zinc-300 focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="supabase-url-input" placeholder="Supabase Project URL (məs: https://xxx.supabase.co)" class="w-full bg-[#161b22] border border-[#21262d] rounded-lg p-2 font-mono text-zinc-300 focus:outline-none focus:border-rose-500">
+                    <input type="password" id="supabase-key-input" placeholder="Supabase Anon API Key" class="w-full bg-[#161b22] border border-[#21262d] rounded-lg p-2 font-mono text-zinc-300 focus:outline-none focus:border-rose-500">
+                    <input type="text" id="r2-public-url" placeholder="R2 və ya Cloudflare Public Bucket URL (məs: https://pub-xxx.r2.dev)" class="w-full bg-[#161b22] border border-[#21262d] rounded-lg p-2 font-mono text-zinc-300 focus:outline-none focus:border-rose-500">
                 </div>
                 <div class="flex justify-between items-center mt-3">
                     <span id="supabase-status-badge" class="text-[9px] text-rose-400 font-bold">Qoşulmayıb (Demo Rejimi)</span>
-                    <button onclick="saveSupabaseConfig()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-[10px] text-white font-bold rounded-lg transition-all">
+                    <button onclick="saveSupabaseConfig()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-[10px] text-white font-bold rounded-lg transition-all">
                         Qoş və Saxla
                     </button>
                 </div>
             </div>
 
             <div id="cms-video-form-container" class="bg-[#0d1117] p-3 rounded-[18px] border border-[#21262d] mb-4 opacity-50 pointer-events-none">
-                <h4 class="text-xs font-bold text-zinc-300 mb-2">📥 Yeni R2 Videosu Əlavə Et</h4>
+                <h4 class="text-xs font-bold text-zinc-300 mb-2">📥 Yeni Cloudflare Videosu Əlavə Et</h4>
                 <div class="space-y-2 text-xs">
-                    <input type="text" id="add-video-title" placeholder="Video Başlığı (məs: Lo-Fi Study Edit)" class="w-full bg-[#161b22] border border-[#21262d] p-2.5 rounded-lg text-zinc-300 placeholder-zinc-600 focus:outline-none">
+                    <input type="text" id="add-video-title" placeholder="Video Başlığı (məs: Obsession Edit)" class="w-full bg-[#161b22] border border-[#21262d] p-2.5 rounded-lg text-zinc-300 placeholder-zinc-600 focus:outline-none">
                     
-                    <!-- Cloudflare R2-yə birbaşa fayl yükləmə (Worker ilə) -->
-                    <div class="bg-[#161b22] p-2.5 rounded-lg border border-[#21262d] space-y-1.5">
-                        <label class="block text-[10px] font-bold text-zinc-400">Yükləmək üçün .mp4 Faylı Seçin (Worker tələb olunur)</label>
-                        <input type="file" id="video-file-input" accept="video/mp4" class="w-full text-[10px] text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer">
-                        
-                        <div id="upload-progress-container" class="hidden space-y-1">
-                            <div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
-                                <div id="upload-progress-bar" class="bg-emerald-500 h-full w-0 transition-all duration-100"></div>
-                            </div>
-                            <span id="upload-progress-text" class="text-[9px] text-zinc-400 font-bold">Hazırlanır... 0%</span>
-                        </div>
-                    </div>
-
-                    <input type="text" id="add-video-url" placeholder="Və ya birbaşa R2 video URL daxil edin" class="w-full bg-[#161b22] border border-[#21262d] p-2.5 rounded-lg text-zinc-300 placeholder-zinc-600 focus:outline-none">
-                    <input type="text" id="add-video-tags" placeholder="Taglər (vergüllə: film-edit, normal-edit)" class="w-full bg-[#161b22] border border-[#21262d] p-2.5 rounded-lg text-zinc-300 placeholder-zinc-600 focus:outline-none">
+                    <input type="text" id="add-video-url" placeholder="Video yolu (məs: videos-of-my-favorites/obsession/normal-edit-1.mp4)" class="w-full bg-[#161b22] border border-[#21262d] p-2.5 rounded-lg text-zinc-300 placeholder-zinc-600 focus:outline-none">
+                    <input type="text" id="add-video-tags" placeholder="Taglər (vergüllə: film-edit, obsession, couple-edit)" class="w-full bg-[#161b22] border border-[#21262d] p-2.5 rounded-lg text-zinc-300 placeholder-zinc-600 focus:outline-none">
                     
-                    <button onclick="handleHybridVideoUpload()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-lg transition-colors">
-                        Məlumat Bazasına Göndər
+                    <button onclick="handleHybridVideoUpload()" class="w-full py-2 bg-rose-600 hover:bg-rose-500 font-bold text-white rounded-lg transition-colors">
+                        Supabase Məlumat Bazasına Göndər
                     </button>
                 </div>
             </div>
@@ -224,7 +177,7 @@ export default {
 
                 <div class="absolute top-3 inset-x-3 z-20 space-y-2 pointer-events-none">
                     <div class="pointer-events-auto flex items-center justify-center gap-1.5 glass p-1.5 rounded-[18px] border border-[#21262d] w-fit mx-auto">
-                        <button onclick="changeSort('foryou')" id="btn-sort-foryou" class="px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-[#1a64a0] border border-[#1a64a0]/20 shadow-lg">
+                        <button onclick="changeSort('foryou')" id="btn-sort-foryou" class="px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-[#b01a2e] border border-[#b01a2e]/20 shadow-lg">
                             ✨ For You
                         </button>
                         <button onclick="changeSort('date')" id="btn-sort-date" class="px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
@@ -237,9 +190,9 @@ export default {
 
                     <div id="active-tag-indicator" class="hidden pointer-events-auto glass border border-[#21262d] p-2.5 rounded-[18px] flex items-center justify-center gap-3 animate-fade-in w-fit mx-auto">
                         <span class="text-xs font-medium text-zinc-300">
-                            Süzgəc: <span id="active-tag-name" class="font-bold uppercase tracking-wider text-emerald-400">#tag</span>
+                            Süzgəc: <span id="active-tag-name" class="font-bold uppercase tracking-wider text-rose-400">#tag</span>
                         </span>
-                        <button onclick="clearTagFilter()" class="text-zinc-400 hover:text-emerald-400 text-xs flex items-center gap-1 font-bold bg-[#0d1117] px-2 py-1 rounded-[18px]">
+                        <button onclick="clearTagFilter()" class="text-zinc-400 hover:text-rose-400 text-xs flex items-center gap-1 font-bold bg-[#0d1117] px-2 py-1 rounded-[18px]">
                             Sıfırla ✕
                         </button>
                     </div>
@@ -308,8 +261,8 @@ export default {
         </main>
 
         <nav id="bottom-nav" class="fixed bottom-2 left-1/2 -translate-x-1/2 z-40 w-[80%] max-w-xs rounded-[16px] glass shadow-[0_12px_40px_rgba(0,0,0,0.5)] px-3 py-1.5 flex items-center justify-around transition-all duration-300">
-            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 group text-[#1a64a0] transition-colors">
-                <div class="w-7 h-7 rounded-[14px] flex items-center justify-center transition-all bg-[#1a64a0]/10 scale-105" id="nav-icon-home-bg">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 group text-[#b01a2e] transition-colors">
+                <div class="w-7 h-7 rounded-[14px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105" id="nav-icon-home-bg">
                     <svg class="w-3.5 h-3.5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                     </svg>
@@ -357,7 +310,7 @@ export default {
                     <span id="player-watched-badge" class="px-2 py-0.5 bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] font-bold rounded-md hidden">
                         ✓ İZLƏNDİ
                     </span>
-                    <button onclick="toggleFavoriteOnActive()" id="player-favorite-btn" class="text-zinc-400 hover:text-emerald-500 transition-colors">
+                    <button onclick="toggleFavoriteOnActive()" id="player-favorite-btn" class="text-zinc-400 hover:text-rose-500 transition-colors">
                         <svg id="player-favorite-svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
@@ -369,7 +322,7 @@ export default {
                 <div class="relative max-w-full max-h-[70vh] bg-black/40 rounded-[18px] overflow-hidden border border-white/5 flex items-center justify-center group" id="video-wrapper" style="aspect-ratio: 9 / 16;">
                     
                     <div id="player-loading-spinner" class="absolute inset-0 flex items-center justify-center bg-black/60 z-30 transition-opacity duration-200 hidden">
-                        <div class="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div class="w-12 h-12 border-4 border-[#b01a2e] border-t-transparent rounded-full animate-spin"></div>
                     </div>
 
                     <video id="main-video-player" playsinline class="w-full h-full object-contain cursor-pointer">
@@ -399,7 +352,7 @@ export default {
             <div class="w-full glass p-4 rounded-[18px] border border-white/5 space-y-3.5 z-20">
                 <div class="space-y-1">
                     <div class="relative w-full h-1 bg-zinc-800 rounded-full overflow-hidden cursor-pointer" id="progress-container" onclick="seekVideo(event)">
-                        <div id="progress-bar" class="absolute left-0 top-0 h-full bg-gradient-to-r from-emerald-500 to-[#1a64a0] w-0"></div>
+                        <div id="progress-bar" class="absolute left-0 top-0 h-full bg-gradient-to-r from-rose-500 to-purple-500 w-0"></div>
                     </div>
                     <div class="flex items-center justify-between text-[9px] text-zinc-400 font-bold">
                         <span id="current-time">00:00</span>
@@ -420,7 +373,7 @@ export default {
                             </svg>
                         </button>
                         <div class="text-[9px] text-zinc-400">
-                            Yükləndi: <span id="player-days-ago" class="font-bold text-emerald-400">X gün əvvəl</span>
+                            Yükləndi: <span id="player-days-ago" class="font-bold text-rose-400">X gün əvvəl</span>
                         </div>
                     </div>
 
@@ -444,27 +397,28 @@ export default {
     </div>
 
     <script>
+        // Sizin Cloudflare-ə yüklədiyiniz yeni videolar artıq ana verilənlər bazası kimi təyin olundu
         window.demoVideos = [
             {
-                "id": "vid-1",
-                "title": "Your Name Edit • Kimino nawa",
-                "file": "https://assets.mixkit.co/videos/preview/mixkit-holding-hands-and-walking-in-a-snowy-forest-34407-large.mp4",
-                "tags": ["film-edit", "couple-edit"],
-                "uploadDate": "2026-06-29"
+                "id": "vid-obsession-1",
+                "title": "Obsession Edit (Normal)",
+                "file": "videos-of-my-favorites/obsession/normal-edit-1.mp4",
+                "tags": ["film-edit", "obsession", "normal-edit"],
+                "uploadDate": "2026-07-02"
             },
             {
-                "id": "vid-2",
-                "title": "Anime Evening Vibe",
+                "id": "vid-obsession-2",
+                "title": "Obsession Edit (Couple)",
+                "file": "videos-of-my-favorites/obsession/couple-edit-1.mp4",
+                "tags": ["couple-edit", "obsession"],
+                "uploadDate": "2026-07-02"
+            },
+            {
+                "id": "vid-tokyo-rain",
+                "title": "Anime Evening Vibe - Tokyo Rain",
                 "file": "https://assets.mixkit.co/videos/preview/mixkit-cyberpunk-tokyo-street-with-neon-lights-and-rain-34311-large.mp4",
                 "tags": ["normal-edit", "crush-list"],
                 "uploadDate": "2026-06-25"
-            },
-            {
-                "id": "vid-3",
-                "title": "Crush List Special - Tokyo Rain",
-                "file": "https://assets.mixkit.co/videos/preview/mixkit-woman-walking-alone-at-night-on-a-city-street-42289-large.mp4",
-                "tags": ["crush-list"],
-                "uploadDate": "2026-06-12"
             }
         ];
 
@@ -490,7 +444,8 @@ export default {
             "film-edit": { bg: "bg-[#161b22]", border: "border-[#b01a2e]/30", text: "text-[#b01a2e]", label: "🎬 Film Edit", icon: "🎬", glow: "shadow-[#b01a2e]/5" },
             "couple-edit": { bg: "bg-[#161b22]", border: "border-[#1a64a0]/30", text: "text-[#1a64a0]", label: "❤️ Couple Edit", icon: "❤️", glow: "shadow-[#1a64a0]/5" },
             "crush-list": { bg: "bg-[#161b22]", border: "border-[#257a3e]/30", text: "text-[#257a3e]", label: "⭐ Crush List", icon: "⭐", glow: "shadow-[#257a3e]/5" },
-            "normal-edit": { bg: "bg-[#161b22]", border: "border-[#c69200]/30", text: "text-[#c69200]", label: "🎨 Normal Edit", icon: "🎨", glow: "shadow-[#c69200]/5" }
+            "normal-edit": { bg: "bg-[#161b22]", border: "border-[#c69200]/30", text: "text-[#c69200]", label: "🎨 Normal Edit", icon: "🎨", glow: "shadow-[#c69200]/5" },
+            "obsession": { bg: "bg-[#161b22]", border: "border-purple-500/30", text: "text-purple-400", label: "🌀 Obsession", icon: "🌀", glow: "shadow-purple-500/5" }
         };
 
         const autoPalette = ['#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#ef4444', '#14b8a6'];
@@ -524,23 +479,37 @@ export default {
             };
         }
 
+        window.getVideoUrl = function(file) {
+            if (!file) return '';
+            if (file.startsWith('http://') || file.startsWith('https://')) {
+                return file;
+            }
+            // Nisbi (relative) linkdirsə R2 bazasını və ya nisbi qovluğu yoxla
+            const savedR2Url = localStorage.getItem('kadr_r2_url');
+            if (savedR2Url) {
+                const base = savedR2Url.endsWith('/') ? savedR2Url : `${savedR2Url}/`;
+                return `${base}${file}`;
+            }
+            return `./${file}`;
+        };
+
         window.onload = async function() {
             setupAutoHideMenu();
             setupKeyboardControls();
             setupProgressBarEvents();
             setupBufferingListeners();
 
-            // Load saved settings
             const savedUrl = localStorage.getItem('kadr_supabase_url');
             const savedKey = localStorage.getItem('kadr_supabase_key');
             const savedR2Url = localStorage.getItem('kadr_r2_url');
-            const savedWorker = localStorage.getItem('kadr_cf_worker');
+
+            if (savedR2Url) {
+                document.getElementById('r2-public-url').value = savedR2Url;
+            }
 
             if (savedUrl && savedKey) {
                 document.getElementById('supabase-url-input').value = savedUrl;
                 document.getElementById('supabase-key-input').value = savedKey;
-                if (savedR2Url) document.getElementById('r2-public-url').value = savedR2Url;
-                if (savedWorker) document.getElementById('cf-worker-url').value = savedWorker;
                 await initSupabase(savedUrl, savedKey);
             } else {
                 window.videosDatabase = [...window.demoVideos];
@@ -557,7 +526,7 @@ export default {
                 isSupabaseInitialized = true;
 
                 document.getElementById('supabase-status-badge').className = "text-[9px] text-emerald-400 font-bold";
-                document.getElementById('supabase-status-badge').innerText = "Supabase & R2 Aktif";
+                document.getElementById('supabase-status-badge').innerText = "Supabase Database Aktif";
                 document.getElementById('cms-video-form-container').classList.remove('opacity-50', 'pointer-events-none');
                 document.getElementById('cms-video-list-container').classList.remove('hidden');
 
@@ -586,7 +555,7 @@ export default {
                     window.videosDatabase = data.map(v => ({
                         id: v.id,
                         title: v.title,
-                        file: v.file, // Bu, Cloudflare R2 daxilindəki faylın ictimai URL-idir
+                        file: v.file, 
                         tags: Array.isArray(v.tags) ? v.tags : (v.tags ? v.tags.split(',') : ['normal-edit']),
                         uploadDate: v.uploadDate
                     }));
@@ -620,13 +589,11 @@ export default {
             const url = document.getElementById('supabase-url-input').value.trim();
             const key = document.getElementById('supabase-key-input').value.trim();
             const r2Url = document.getElementById('r2-public-url').value.trim();
-            const workerUrl = document.getElementById('cf-worker-url').value.trim();
 
             if (!url || !key) {
                 localStorage.removeItem('kadr_supabase_url');
                 localStorage.removeItem('kadr_supabase_key');
                 localStorage.removeItem('kadr_r2_url');
-                localStorage.removeItem('kadr_cf_worker');
                 window.showToast("Ayarlar silindi, Demo rejim aktivləşdirildi.", "error");
                 setTimeout(() => window.location.reload(), 1000);
                 return;
@@ -635,102 +602,17 @@ export default {
             localStorage.setItem('kadr_supabase_url', url);
             localStorage.setItem('kadr_supabase_key', key);
             localStorage.setItem('kadr_r2_url', r2Url);
-            localStorage.setItem('kadr_cf_worker', workerUrl);
             window.showToast("Uğurla yadda saxlanıldı! Səhifə yenilənir...");
             setTimeout(() => window.location.reload(), 1500);
         };
 
-        async function uploadVideoToR2(file) {
-            const workerUrl = document.getElementById('cf-worker-url').value.trim();
-            const r2PublicUrl = document.getElementById('r2-public-url').value.trim();
-
-            if (!workerUrl) {
-                window.showToast("R2 yükləməsi üçün Cloudflare Worker URL daxil edilməlidir!", "error");
-                return null;
-            }
-            if (!r2PublicUrl) {
-                window.showToast("R2 Public Bucket URL daxil edilməlidir!", "error");
-                return null;
-            }
-
-            const progressContainer = document.getElementById('upload-progress-container');
-            const progressBar = document.getElementById('upload-progress-bar');
-            const progressText = document.getElementById('upload-progress-text');
-
-            progressContainer.classList.remove('hidden');
-            progressBar.style.width = '0%';
-            progressText.innerText = "Hazırlanır...";
-
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-            const uploadUrl = `${workerUrl}?key=${fileName}`;
-
-            try {
-                const response = await new Promise((resolve, reject) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("PUT", uploadUrl, true);
-                    xhr.setRequestHeader("Content-Type", file.type);
-
-                    xhr.upload.onprogress = (e) => {
-                        if (e.lengthComputable) {
-                            const percent = Math.round((e.loaded / e.total) * 100);
-                            progressBar.style.width = `${percent}%`;
-                            progressText.innerText = `Yüklənir... ${percent}%`;
-                        }
-                    };
-
-                    xhr.onload = () => {
-                        if (xhr.status === 200 || xhr.status === 201) {
-                            resolve(xhr.responseText);
-                        } else {
-                            reject(new Error(`Server error: ${xhr.status}`));
-                        }
-                    };
-
-                    xhr.onerror = () => reject(new Error("Şəbəkə xətası baş verdi"));
-                    xhr.send(file);
-                });
-
-                progressBar.style.width = '100%';
-                progressText.innerText = "Yükləndi! Link generasiya olunur...";
-
-                // R2-dən gələn ictimai linki qururuq
-                const formattedR2Url = r2PublicUrl.endsWith('/') ? r2PublicUrl : `${r2PublicUrl}/`;
-                return `${formattedR2Url}${fileName}`;
-            } catch (err) {
-                console.error("R2 Upload Error:", err);
-                window.showToast("R2-yə yüklənmə zamanı xəta yarandı.", "error");
-                return null;
-            } finally {
-                setTimeout(() => {
-                    progressContainer.classList.add('hidden');
-                }, 3000);
-            }
-        }
-
         window.handleHybridVideoUpload = async function() {
             const title = document.getElementById('add-video-title').value.trim();
-            const fileInput = document.getElementById('video-file-input');
-            let videoUrl = document.getElementById('add-video-url').value.trim();
+            const videoUrl = document.getElementById('add-video-url').value.trim();
             const tagsInput = document.getElementById('add-video-tags').value.trim();
 
-            if (!title) {
-                window.showToast("Başlıq mütləq daxil edilməlidir!", "error");
-                return;
-            }
-
-            if (fileInput.files.length > 0) {
-                window.showToast("Fayl Cloudflare R2-yə yüklənir, xahiş edirik gözləyin...");
-                const uploadedUrl = await uploadVideoToR2(fileInput.files[0]);
-                if (uploadedUrl) {
-                    videoUrl = uploadedUrl;
-                } else {
-                    return;
-                }
-            }
-
-            if (!videoUrl) {
-                window.showToast("Mütləq video linki və ya fayl seçin!", "error");
+            if (!title || !videoUrl) {
+                window.showToast("Başlıq və Video yolu mütləq daxil edilməlidir!", "error");
                 return;
             }
 
@@ -751,11 +633,10 @@ export default {
 
                 if (error) throw error;
 
-                window.showToast("Uğurla əlavə olundu!");
+                window.showToast("Uğurla database-ə əlavə olundu!");
                 document.getElementById('add-video-title').value = '';
                 document.getElementById('add-video-url').value = '';
                 document.getElementById('add-video-tags').value = '';
-                fileInput.value = '';
 
                 await fetchVideosFromSupabase();
             } catch(e) {
@@ -932,10 +813,11 @@ export default {
                 slide.className = 'feed-slide relative w-full h-full snap-start bg-black flex-shrink-0';
                 slide.innerHTML = `
                     <div id="feed-spinner-${video.id}" class="absolute inset-0 flex items-center justify-center bg-black/40 z-30 hidden">
-                        <div class="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div class="w-10 h-10 border-4 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
                     </div>
 
-                    <video class="feed-video absolute inset-0 w-full h-full object-contain bg-black" src="${video.file}" data-id="${video.id}" loop playsinline preload="metadata" onclick="toggleFeedPlay('${video.id}')">
+                    <!-- Direct assignment of resolved video src for flawless rendering -->
+                    <video class="feed-video absolute inset-0 w-full h-full object-contain bg-black" src="${window.getVideoUrl(video.file)}" data-id="${video.id}" loop playsinline preload="metadata" onclick="toggleFeedPlay('${video.id}')">
                     </video>
 
                     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/40 pointer-events-none"></div>
@@ -972,7 +854,7 @@ export default {
         }
 
         function heartSvg(isFav) {
-            return `<svg class="w-7 h-7 ${isFav ? 'text-emerald-500' : 'text-white'}" fill="${isFav ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            return `<svg class="w-7 h-7 ${isFav ? 'text-rose-500 fill-rose-500' : 'text-white'}" fill="${isFav ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>`;
         }
@@ -1070,7 +952,7 @@ export default {
                 const btn = document.getElementById(map[key]);
                 if (!btn) return;
                 if (key === active) {
-                    btn.className = "px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-emerald-400 border border-emerald-500/20 shadow-lg";
+                    btn.className = "px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-rose-400 border border-rose-500/20 shadow-lg";
                 } else {
                     btn.className = "px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200";
                 }
@@ -1079,6 +961,7 @@ export default {
 
         function renderTagsView() {
             const container = document.getElementById('tags-category-grid');
+            if (!container) return;
             container.innerHTML = '';
 
             const tagCounts = {};
@@ -1120,6 +1003,7 @@ export default {
 
         function renderSearchSuggestions() {
             const container = document.getElementById('search-tag-suggestions');
+            if (!container) return;
             container.innerHTML = '';
 
             const uniqueTags = [...new Set(window.videosDatabase.flatMap(v => v.tags))];
@@ -1160,6 +1044,7 @@ export default {
         function filterSearch() {
             const container = document.getElementById('search-results-grid');
             const heading = document.getElementById('search-results-heading');
+            if (!container) return;
             container.innerHTML = '';
 
             let matches = [...window.videosDatabase];
@@ -1190,14 +1075,14 @@ export default {
                 item.onclick = () => openLightbox(video.id);
                 item.innerHTML = `
                     <div class="w-14 h-14 rounded-[18px] overflow-hidden bg-[#0d1117] flex-shrink-0">
-                        <video src="${video.file}" class="w-full h-full object-cover" muted preload="metadata"></video>
+                        <video src="${window.getVideoUrl(video.file)}" class="w-full h-full object-cover" muted preload="metadata"></video>
                     </div>
                     <div class="flex-1 min-w-0">
                         <h4 class="text-xs font-bold text-zinc-200 truncate">${video.title}</h4>
                         <div class="flex items-center gap-1.5 mt-1">
                             <span class="text-[9px] text-zinc-500">${daysAgoStr}</span>
                             <span class="text-[9px] text-zinc-500">•</span>
-                            <span class="text-[9px] text-emerald-500 font-bold">${video.tags.join(', ')}</span>
+                            <span class="text-[9px] text-rose-400 font-bold">${video.tags.join(', ')}</span>
                         </div>
                     </div>
                     <div class="text-zinc-500 pr-2">
@@ -1225,8 +1110,8 @@ export default {
                 const bg = document.getElementById(`nav-icon-${nav}-bg`);
 
                 if (nav === tabId) {
-                    btn.className = "flex flex-col items-center gap-1 group text-emerald-500 transition-colors";
-                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all bg-emerald-500/10 scale-105";
+                    btn.className = "flex flex-col items-center gap-1 group text-rose-500 transition-colors";
+                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all bg-rose-500/10 scale-105";
                 } else {
                     btn.className = "flex flex-col items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors";
                     bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all";
@@ -1263,6 +1148,7 @@ export default {
 
         window.showToast = function(message, type = 'success') {
             const container = document.getElementById('toast-container');
+            if (!container) return;
             const toast = document.createElement('div');
 
             const colorClass = type === 'success' ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' : 'border-[#b01a2e]/30 text-[#b01a2e] bg-[#b01a2e]/10';
@@ -1335,12 +1221,13 @@ export default {
             window.isMuted = false;
             updateMuteUI();
 
-            videoElement.src = window.activeVideo.file;
+            // Sizin Cloudflare-dəki videonun linkini həll edərək playerə təyin edirik
+            videoElement.src = window.getVideoUrl(window.activeVideo.file);
             videoElement.preload = 'auto';
             videoElement.load();
 
             document.getElementById('player-title').innerText = window.activeVideo.title;
-            document.getElementById('player-blur-bg').style.backgroundImage = `url('${window.activeVideo.file}')`;
+            document.getElementById('player-blur-bg').style.backgroundImage = `url('${window.getVideoUrl(window.activeVideo.file)}')`;
             document.getElementById('player-days-ago').innerText = getDaysAgoString(window.activeVideo.uploadDate);
 
             const tagsCont = document.getElementById('player-tags');
@@ -1522,9 +1409,9 @@ export default {
             const isFavorite = window.favorites.includes(window.activeVideo.id);
 
             if (isFavorite) {
-                favSvg.classList.add('text-emerald-500', 'fill-emerald-500');
+                favSvg.classList.add('text-[#b01a2e]', 'fill-[#b01a2e]');
             } else {
-                favSvg.classList.remove('text-emerald-500', 'fill-emerald-500');
+                favSvg.classList.remove('text-[#b01a2e]', 'fill-[#b01a2e]');
                 favSvg.classList.add('text-zinc-400');
             }
         }
