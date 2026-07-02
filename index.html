@@ -71,6 +71,11 @@
         .d-color { color: #257a3e; text-shadow: 0 0 15px rgba(37, 122, 62, 0.25); }
         .r-color { color: #c69200; text-shadow: 0 0 15px rgba(198, 146, 0, 0.25); }
         .dot-color { color: rgba(240, 246, 252, 0.25); }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .feed-slide { scroll-snap-align: start; scroll-snap-stop: always; }
     </style>
 </head>
 <body class="bg-[#0d1117] text-zinc-100 min-h-screen font-sans flex flex-col justify-between overflow-x-hidden selection:bg-rose-500/20 selection:text-rose-200">
@@ -131,46 +136,43 @@
             </button>
         </div>
 
-        <main class="flex-1 p-4 relative z-10">
+        <main class="flex-1 relative z-10 overflow-hidden">
 
-            <section id="tab-home" class="space-y-5">
-                <div class="flex items-center justify-between bg-[#161b22] p-3 rounded-[18px] border border-[#21262d]">
-                    <div class="flex gap-1.5">
-                        <button onclick="changeSort('date')" id="btn-sort-date" class="px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-[#b01a2e] border border-[#b01a2e]/20 shadow-lg">
-                            🔥 Son Videolar
+            <section id="tab-home" class="relative h-full">
+
+                <div class="absolute top-3 inset-x-3 z-20 space-y-2 pointer-events-none">
+                    <div class="pointer-events-auto flex items-center justify-center gap-1.5 glass p-1.5 rounded-[18px] border border-[#21262d] w-fit mx-auto">
+                        <button onclick="changeSort('foryou')" id="btn-sort-foryou" class="px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-[#b01a2e] border border-[#b01a2e]/20 shadow-lg">
+                            ✨ For You
                         </button>
-                        <button onclick="changeSort('title')" id="btn-sort-title" class="px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
-                            🔤 Başlıq
+                        <button onclick="changeSort('date')" id="btn-sort-date" class="px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
+                            🕒 Last Uploaded
                         </button>
                         <button onclick="changeSort('favorites')" id="btn-sort-favorites" class="px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200">
-                            ⭐️ Favorilər
+                            ⭐ Favorites
+                        </button>
+                    </div>
+
+                    <div id="active-tag-indicator" class="hidden pointer-events-auto glass border border-[#21262d] p-2.5 rounded-[18px] flex items-center justify-center gap-3 animate-fade-in w-fit mx-auto">
+                        <span class="text-xs font-medium text-zinc-300">
+                            Süzgəc: <span id="active-tag-name" class="font-bold uppercase tracking-wider text-rose-400">#tag</span>
+                        </span>
+                        <button onclick="clearTagFilter()" class="text-zinc-400 hover:text-rose-400 text-xs flex items-center gap-1 font-bold bg-[#0d1117] px-2 py-1 rounded-[18px]">
+                            Sıfırla ✕
                         </button>
                     </div>
                 </div>
 
-                <div id="active-tag-indicator" class="hidden bg-[#161b22] border border-[#21262d] p-3.5 rounded-[18px] flex items-center justify-between animate-fade-in">
-                    <span class="text-xs font-medium text-zinc-300">
-                        Süzgəc: <span id="active-tag-name" class="font-bold uppercase tracking-wider text-rose-400">#tag</span>
-                    </span>
-                    <button onclick="clearTagFilter()" class="text-zinc-400 hover:text-rose-400 text-xs flex items-center gap-1 font-bold bg-[#0d1117] px-2 py-1 rounded-[18px]">
-                        Sıfırla ✕
-                    </button>
-                </div>
-
-                <div id="skeleton-loader" class="space-y-5">
-                    <div class="bg-[#161b22] border border-[#21262d] rounded-[18px] p-4 space-y-4 animate-pulse">
-                        <div class="aspect-video bg-[#30363d] rounded-[18px]"></div>
+                <div id="skeleton-loader" class="h-full flex items-center justify-center px-6">
+                    <div class="w-full max-w-xs bg-[#161b22] border border-[#21262d] rounded-[18px] p-4 space-y-4 animate-pulse">
+                        <div class="aspect-[9/16] bg-[#30363d] rounded-[18px]"></div>
                         <div class="h-4 bg-[#30363d] rounded w-2/3"></div>
-                        <div class="flex gap-2">
-                            <div class="h-6 bg-[#30363d] rounded-lg w-16"></div>
-                            <div class="h-6 bg-[#30363d] rounded-lg w-20"></div>
-                        </div>
                     </div>
                 </div>
 
-                <div id="video-grid" class="hidden space-y-5"></div>
+                <div id="video-grid" class="hidden h-full overflow-y-scroll snap-y snap-mandatory no-scrollbar"></div>
 
-                <div id="empty-state" class="hidden py-16 text-center space-y-4">
+                <div id="empty-state" class="hidden h-full flex flex-col items-center justify-center text-center space-y-4 px-6">
                     <div class="w-16 h-16 bg-[#161b22] rounded-full flex items-center justify-center mx-auto border border-[#21262d] text-zinc-500 text-2xl">
                         🎬
                     </div>
@@ -181,7 +183,7 @@
                 </div>
             </section>
 
-            <section id="tab-search" class="hidden space-y-5 animate-slide-up">
+            <section id="tab-search" class="hidden p-4 space-y-5 animate-slide-up overflow-y-auto h-full">
                 <div class="space-y-3">
                     <h2 class="text-lg font-black tracking-tight text-zinc-100 flex items-center gap-2">
                         <span>🔍</span> Video Axtarın
@@ -210,7 +212,7 @@
                 </div>
             </section>
 
-            <section id="tab-tags" class="hidden space-y-5 animate-slide-up">
+            <section id="tab-tags" class="hidden p-4 space-y-5 animate-slide-up overflow-y-auto h-full">
                 <div class="space-y-1">
                     <h2 class="text-lg font-black tracking-tight text-zinc-100 flex items-center gap-2">
                         <span>📂</span> Bütün Kateqoriyalar
@@ -400,130 +402,18 @@
             }
         ];
 
-        // GitHub Pages local /videos structure — default source
-        const localVideos = [
-            {
-                "id": "local-1",
-                "title": "Obsession Edit",
-                "file": "videos/obsession/normal-edit-1.mp4",
-                "thumbnail": "thumbnails/edit1.jpg",
-                "tags": ["film-edit", "obsession"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-2",
-                "title": "Obsession Edit",
-                "file": "videos/obsession/normal-edit-2.mp4",
-                "thumbnail": "thumbnails/edit2.jpg",
-                "tags": ["film-edit", "obsession"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-3",
-                "title": "Obsession Edit",
-                "file": "videos/obsession/normal-edit-3.mp4",
-                "thumbnail": "thumbnails/edit3.jpg",
-                "tags": ["film-edit", "obsession"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-4",
-                "title": "Obsession Edit",
-                "file": "videos/obsession/normal-edit-4.mp4",
-                "thumbnail": "thumbnails/edit4.jpg",
-                "tags": ["film-edit", "obsession"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-5",
-                "title": "Obsession Edit",
-                "file": "videos/obsession/crush-list-1.mp4",
-                "thumbnail": "thumbnails/edit5.jpg",
-                "tags": ["film-edit", "crush-list", "obsession"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-6",
-                "title": "The Amazing Digital Circus Edit",
-                "file": "videos/the-amazing-digital-circus/couple-edit-1.mp4",
-                "thumbnail": "thumbnails/edit6.jpg",
-                "tags": ["film-edit", "the-amazing-digital-circus", "couple-edit"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-7",
-                "title": "The Amazing Digital Circus Edit",
-                "file": "videos/the-amazing-digital-circus/couple-edit-2.mp4",
-                "thumbnail": "thumbnails/edit7.jpg",
-                "tags": ["film-edit", "the-amazing-digital-circus", "couple-edit"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-8",
-                "title": "The Amazing Digital Circus Edit",
-                "file": "videos/the-amazing-digital-circus/normal-edit-1.mp4",
-                "thumbnail": "thumbnails/edit8.jpg",
-                "tags": ["film-edit", "the-amazing-digital-circus"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-9",
-                "title": "The Amazing Digital Circus Edit",
-                "file": "videos/the-amazing-digital-circus/normal-edit-2.mp4",
-                "thumbnail": "thumbnails/edit9.jpg",
-                "tags": ["film-edit", "the-amazing-digital-circus"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-10",
-                "title": "The Amazing Digital Circus Edit",
-                "file": "videos/the-amazing-digital-circus/normal-edit-3.mp4",
-                "thumbnail": "thumbnails/edit10.jpg",
-                "tags": ["film-edit", "the-amazing-digital-circus"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-11",
-                "title": "Toy Story Edit",
-                "file": "videos/toy-story/couple-edit-1.mp4",
-                "thumbnail": "thumbnails/edit11.jpg",
-                "tags": ["film-edit", "toy-story", "couple-edit"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-12",
-                "title": "Toy Story Edit",
-                "file": "videos/toy-story/normal-edit-1.mp4",
-                "thumbnail": "thumbnails/edit12.jpg",
-                "tags": ["film-edit", "toy-story"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-13",
-                "title": "From Edit",
-                "file": "videos/from/couple-edit-1.mp4",
-                "thumbnail": "thumbnails/edit13.jpg",
-                "tags": ["film-edit", "from", "couple-edit"],
-                "uploadDate": "2026-07-02"
-            },
-            {
-                "id": "local-14",
-                "title": "Rick and Morty Edit",
-                "file": "videos/rick-and-morty/normal-edit-1.mp4",
-                "thumbnail": "thumbnails/edit14.jpg",
-                "tags": ["film-edit", "rick-and-morty"],
-                "uploadDate": "2026-07-02"
-            }
-        ];
+        // Local videolar artıq data/videos.json faylından fetch olunur (aşağıda loadLocalVideos)
 
         // Persistent application states — default source: local GitHub /videos
         let currentSourceMode = localStorage.getItem('kadr_source_mode') || 'local';
-        let videosDatabase = currentSourceMode === 'demo' ? [...demoVideos] : [...localVideos];
+        let videosDatabase = [];
 
         let currentTab = 'home';
         let searchQuery = '';
         let currentTagFilter = null;
-        let sortBy = 'date';
+        let sortBy = 'foryou';
+        let forYouOrder = null;
+        let feedObserver = null;
 
         let favorites = JSON.parse(localStorage.getItem('kadr_favorites')) || [];
         let watched = JSON.parse(localStorage.getItem('kadr_watched')) || [];
@@ -573,25 +463,45 @@
             };
         }
 
-        window.onload = function() {
-            updateJsonPreview();
+        async function loadLocalVideos() {
+            try {
+                const res = await fetch('data/videos.json');
+                if (!res.ok) throw new Error('videos.json tapılmadı');
+                return await res.json();
+            } catch (e) {
+                console.error('videos.json yüklənmədi:', e);
+                showToast('data/videos.json tapılmadı', 'error');
+                return [];
+            }
+        }
 
+        async function loadVideosForMode(mode) {
+            return mode === 'demo' ? [...demoVideos] : await loadLocalVideos();
+        }
+
+        function updateModeButtonsUI(mode) {
             const demoBtn = document.getElementById('btn-mode-demo');
             const localBtn = document.getElementById('btn-mode-local');
-            if (currentSourceMode === 'demo') {
+            if (mode === 'demo') {
                 demoBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all bg-[#1a64a0] text-white";
                 localBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all text-zinc-400 hover:text-white";
             } else {
                 localBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all bg-[#1a64a0] text-white";
                 demoBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all text-zinc-400 hover:text-white";
             }
+        }
 
-            setTimeout(() => {
-                const loader = document.getElementById('skeleton-loader');
-                if(loader) loader.classList.add('hidden');
-                document.getElementById('video-grid').classList.remove('hidden');
-                renderApp();
-            }, 1000);
+        window.onload = async function() {
+            updateJsonPreview();
+            updateModeButtonsUI(currentSourceMode);
+            updateSortButtonsUI('foryou');
+
+            videosDatabase = await loadVideosForMode(currentSourceMode);
+
+            const loader = document.getElementById('skeleton-loader');
+            if (loader) loader.classList.add('hidden');
+            document.getElementById('video-grid').classList.remove('hidden');
+            renderApp();
 
             setupAutoHideMenu();
             setupKeyboardControls();
@@ -672,10 +582,11 @@
 
             if (sortBy === 'date') {
                 filteredList.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
-            } else if (sortBy === 'title') {
-                filteredList.sort((a, b) => a.title.localeCompare(b.title));
             } else if (sortBy === 'favorites') {
                 filteredList = filteredList.filter(v => favorites.includes(v.id));
+            } else if (sortBy === 'foryou') {
+                if (!forYouOrder) forYouOrder = shuffleArray(videosDatabase.map(v => v.id));
+                filteredList.sort((a, b) => forYouOrder.indexOf(a.id) - forYouOrder.indexOf(b.id));
             }
 
             if (filteredList.length === 0) {
@@ -697,58 +608,133 @@
                     return `<span onclick="filterByTag('${tag}', event)" class="px-2.5 py-1 rounded-[18px] text-[9px] font-bold tracking-wide uppercase cursor-pointer border ${style.bg} ${style.border} ${style.text} hover:scale-105 transition-transform duration-200">${tag}</span>`;
                 }).join('');
 
-                const videoCard = document.createElement('div');
-                videoCard.className = 'bg-[#161b22] border border-[#21262d] rounded-[18px] p-4 space-y-3.5 hover:border-[#30363d] transition-all duration-300 shadow-md group overflow-hidden';
-                videoCard.innerHTML = `
-                    <div onclick="openLightbox('${video.id}')" class="relative aspect-video rounded-[18px] overflow-hidden cursor-pointer group bg-[#0d1117] shadow-inner">
-                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/600x400/161b22/ffffff?text=K.A.D.R'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-85 group-hover:opacity-40 transition-opacity"></div>
+                const slide = document.createElement('div');
+                slide.className = 'feed-slide relative w-full h-full snap-start bg-black flex-shrink-0';
+                slide.innerHTML = `
+                    <video class="feed-video absolute inset-0 w-full h-full object-cover" data-id="${video.id}" loop playsinline preload="metadata" poster="${video.thumbnail}" onclick="toggleFeedPlay('${video.id}')">
+                        <source src="${video.file}" type="video/mp4">
+                    </video>
 
-                        <div class="absolute top-3 left-3 flex gap-1.5">
-                            ${isWatched ? `
-                                <span class="px-2 py-0.5 bg-emerald-600/90 backdrop-blur text-white text-[9px] font-black rounded-[18px] shadow-lg flex items-center gap-0.5 animate-pulse">
-                                    ✓ İZLƏNDİ
-                                </span>
-                            ` : ''}
-                            <span class="px-2 py-0.5 bg-black/60 backdrop-blur text-zinc-300 text-[9px] font-bold rounded-[18px] shadow-lg">
-                                ${daysAgoStr}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/40 pointer-events-none"></div>
+
+                    <div class="absolute top-16 left-3 flex gap-1.5 z-10">
+                        ${isWatched ? `
+                            <span class="px-2 py-0.5 bg-emerald-600/90 backdrop-blur text-white text-[9px] font-black rounded-[18px] shadow-lg">
+                                ✓ İZLƏNDİ
                             </span>
-                        </div>
-
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div class="w-12 h-12 rounded-full glass flex items-center justify-center text-white scale-90 group-hover:scale-100 transition-transform duration-300">
-                                <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
-                                </svg>
-                            </div>
-                        </div>
+                        ` : ''}
+                        <span class="px-2 py-0.5 bg-black/60 backdrop-blur text-zinc-300 text-[9px] font-bold rounded-[18px] shadow-lg">
+                            ${daysAgoStr}
+                        </span>
                     </div>
 
-                    <div class="space-y-2">
-                        <div class="flex items-start justify-between gap-3">
-                            <h3 onclick="openLightbox('${video.id}')" class="font-bold text-sm text-zinc-100 hover:text-zinc-300 cursor-pointer transition-colors leading-snug flex-1 truncate">
-                                ❤️ ${video.title}
-                            </h3>
-                            <div class="flex items-center gap-1">
-                                <button onclick="toggleFavorite('${video.id}', event)" class="p-1.5 rounded-full hover:bg-[#21262d] text-zinc-500 transition-colors">
-                                    <svg class="w-5 h-5 ${isFavorite ? 'text-[#b01a2e] fill-[#b01a2e]' : 'text-zinc-500 hover:text-[#b01a2e]'}" fill="${isFavorite ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                </button>
-                                <button onclick="shareVideoDirect('${video.id}', event)" class="p-1.5 rounded-full hover:bg-[#21262d] text-zinc-500 hover:text-blue-400 transition-colors">
-                                    <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 10.742l4.832-2.416m0 4.348l-4.832 2.416m-4.832-2.416a3 3 0 115.367-1.484 3 3 0 01-5.367 1.484zm10.602-5.46a3 3 0 115.368-1.484 3 3 0 01-5.368 1.484zm0 10.92a3 3 0 115.368-1.484 3 3 0 01-5.368 1.484z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="absolute right-3 bottom-32 z-10 flex flex-col items-center gap-4">
+                        <button onclick="toggleFeedFavorite('${video.id}', event)" id="feed-fav-${video.id}" class="w-12 h-12 rounded-full bg-black/35 backdrop-blur flex items-center justify-center transition-transform active:scale-90">
+                            ${heartSvg(isFavorite)}
+                        </button>
+                        <button onclick="toggleFeedMute('${video.id}', event)" id="feed-mute-${video.id}" class="w-12 h-12 rounded-full bg-black/35 backdrop-blur flex items-center justify-center text-white text-lg transition-transform active:scale-90">
+                            🔊
+                        </button>
+                    </div>
 
-                        <div class="flex flex-wrap gap-1.5 pt-0.5">
-                            ${tagBadgesMarkup}
-                        </div>
+                    <div class="absolute left-4 right-20 bottom-24 z-10 space-y-2">
+                        <h3 class="font-bold text-sm text-white drop-shadow-lg leading-snug">❤️ ${video.title}</h3>
+                        <div class="flex flex-wrap gap-1.5">${tagBadgesMarkup}</div>
                     </div>
                 `;
-                gridContainer.appendChild(videoCard);
+                gridContainer.appendChild(slide);
+            });
+
+            setupFeedAutoplay();
+        }
+
+        function heartSvg(isFav) {
+            return `<svg class="w-7 h-7 ${isFav ? 'text-[#b01a2e] fill-[#b01a2e]' : 'text-white'}" fill="${isFav ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>`;
+        }
+
+        function toggleFeedFavorite(id, event) {
+            if (event) event.stopPropagation();
+
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast("Favorilərdən çıxarıldı", "error");
+            } else {
+                favorites.push(id);
+                showToast("Favorilərə əlavə edildi!", "success");
+            }
+            localStorage.setItem('kadr_favorites', JSON.stringify(favorites));
+
+            const btn = document.getElementById(`feed-fav-${id}`);
+            if (btn) btn.innerHTML = heartSvg(favorites.includes(id));
+
+            if (sortBy === 'favorites') {
+                renderVideoGrid();
+            }
+        }
+
+        function toggleFeedPlay(id) {
+            const vid = document.querySelector(`.feed-video[data-id="${id}"]`);
+            if (!vid) return;
+            if (vid.paused) { vid.play().catch(() => {}); } else { vid.pause(); }
+        }
+
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function setupFeedAutoplay() {
+            if (feedObserver) feedObserver.disconnect();
+            const videos = document.querySelectorAll('.feed-video');
+            feedObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const vid = entry.target;
+                    const id = vid.dataset.id;
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+                        vid.play().then(() => {
+                            const btn = document.getElementById(`feed-mute-${id}`);
+                            if (btn) btn.innerText = vid.muted ? '🔇' : '🔊';
+                        }).catch(() => {
+                            vid.muted = true;
+                            const btn = document.getElementById(`feed-mute-${id}`);
+                            if (btn) btn.innerText = '🔇';
+                            vid.play().catch(() => {});
+                        });
+                        markAsWatched(id);
+                    } else {
+                        vid.pause();
+                    }
+                });
+            }, { threshold: [0.6] });
+            videos.forEach(v => feedObserver.observe(v));
+        }
+
+        function toggleFeedMute(id, event) {
+            if (event) event.stopPropagation();
+            const vid = document.querySelector(`.feed-video[data-id="${id}"]`);
+            const btn = document.getElementById(`feed-mute-${id}`);
+            if (!vid) return;
+            vid.muted = !vid.muted;
+            btn.innerText = vid.muted ? '🔇' : '🔊';
+        }
+
+        function updateSortButtonsUI(active) {
+            const map = { foryou: 'btn-sort-foryou', date: 'btn-sort-date', favorites: 'btn-sort-favorites' };
+            Object.keys(map).forEach(key => {
+                const btn = document.getElementById(map[key]);
+                if (!btn) return;
+                if (key === active) {
+                    btn.className = "px-3 py-1.5 rounded-[18px] text-xs font-bold transition-all bg-[#0d1117] text-[#b01a2e] border border-[#b01a2e]/20 shadow-lg";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-[18px] text-xs font-medium transition-all text-zinc-400 hover:text-zinc-200";
+                }
             });
         }
 
@@ -929,6 +915,10 @@
 
         function changeSort(type) {
             sortBy = type;
+            if (type === 'foryou') {
+                forYouOrder = shuffleArray(videosDatabase.map(v => v.id));
+            }
+            updateSortButtonsUI(type);
             renderVideoGrid();
         }
 
@@ -976,7 +966,6 @@
             if (!watched.includes(id)) {
                 watched.push(id);
                 localStorage.setItem('kadr_watched', JSON.stringify(watched));
-                renderApp();
             }
         }
 
@@ -1185,22 +1174,19 @@
             panel.classList.toggle('hidden');
         }
 
-        function setSourceMode(mode) {
+        async function setSourceMode(mode) {
             currentSourceMode = mode;
             localStorage.setItem('kadr_source_mode', mode);
+            updateModeButtonsUI(mode);
 
-            const demoBtn = document.getElementById('btn-mode-demo');
-            const localBtn = document.getElementById('btn-mode-local');
+            document.getElementById('skeleton-loader').classList.remove('hidden');
+            document.getElementById('video-grid').classList.add('hidden');
 
-            if (mode === 'demo') {
-                demoBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all bg-[#1a64a0] text-white";
-                localBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all text-zinc-400 hover:text-white";
-                videosDatabase = [...demoVideos];
-            } else {
-                localBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all bg-[#1a64a0] text-white";
-                demoBtn.className = "px-2.5 py-1 rounded-[18px] text-[11px] font-bold transition-all text-zinc-400 hover:text-white";
-                videosDatabase = [...localVideos];
-            }
+            videosDatabase = await loadVideosForMode(mode);
+            forYouOrder = null;
+
+            document.getElementById('skeleton-loader').classList.add('hidden');
+            document.getElementById('video-grid').classList.remove('hidden');
 
             renderApp();
             showToast(`Mənbə dəyişdirildi: ${mode === 'demo' ? 'Online Demo' : 'Local GitHub Folders'}`);
@@ -1209,22 +1195,28 @@
         function updateJsonPreview() {
             const jsonSchema = [
                 {
-                    "title": "Your Name Edit",
-                    "file": "videos/edit1.mp4",
+                    "id": "local-1",
+                    "title": "Obsession Edit",
+                    "file": "videos/obsession/normal-edit-1.mp4",
                     "thumbnail": "thumbnails/edit1.jpg",
-                    "tags": ["film-edit", "couple-edit"]
+                    "tags": ["film-edit", "obsession"],
+                    "uploadDate": "2026-07-02"
                 },
                 {
-                    "title": "Arcane Season Edit",
-                    "file": "videos/arcane.mp4",
-                    "thumbnail": "thumbnails/edit1.jpg",
-                    "tags": ["film-edit", "arcane"]
+                    "id": "local-2",
+                    "title": "The Amazing Digital Circus Edit",
+                    "file": "videos/the-amazing-digital-circus/couple-edit-1.mp4",
+                    "thumbnail": "thumbnails/edit6.jpg",
+                    "tags": ["film-edit", "the-amazing-digital-circus", "couple-edit"],
+                    "uploadDate": "2026-07-02"
                 },
                 {
-                    "title": "Obsession Moment",
-                    "file": "videos/obsession.mp4",
-                    "thumbnail": "thumbnails/edit2.jpg",
-                    "tags": ["film-edit", "obsession"]
+                    "id": "local-3",
+                    "title": "Toy Story Edit",
+                    "file": "videos/toy-story/normal-edit-1.mp4",
+                    "thumbnail": "thumbnails/edit12.jpg",
+                    "tags": ["film-edit", "toy-story"],
+                    "uploadDate": "2026-07-02"
                 }
             ];
 
