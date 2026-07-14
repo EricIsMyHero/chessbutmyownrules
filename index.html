@@ -180,32 +180,32 @@
 
         </main>
 
-        <nav id="bottom-nav" class="fixed bottom-2 left-1/2 -translate-x-1/2 z-40 w-[65%] max-w-[240px] rounded-[14px] glass shadow-[0_12px_40px_rgba(0,0,0,0.5)] px-2 py-1 flex items-center justify-around transition-all duration-300">
-            <button onclick="switchTab('home')" id="nav-home" class="flex items-center gap-1 group text-[#b01a2e] transition-colors">
-                <div class="w-6 h-6 rounded-[12px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105" id="nav-icon-home-bg">
-                    <svg class="w-3 h-3 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
+        <nav id="bottom-nav" class="fixed bottom-2 left-1/2 -translate-x-1/2 z-40 w-[65%] max-w-[240px] rounded-[14px] sm:w-[80%] sm:max-w-xs sm:rounded-[16px] glass shadow-[0_12px_40px_rgba(0,0,0,0.5)] px-2 py-1 sm:px-3 sm:py-1.5 flex items-center justify-around transition-all duration-300">
+            <button onclick="switchTab('home')" id="nav-home" class="flex items-center gap-1 sm:flex-col sm:gap-0.5 group text-[#b01a2e] transition-colors">
+                <div class="w-6 h-6 rounded-[12px] sm:w-7 sm:h-7 sm:rounded-[14px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105" id="nav-icon-home-bg">
+                    <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                     </svg>
                 </div>
-                <span class="text-[7px] font-bold tracking-wide uppercase">Home</span>
+                <span class="text-[7px] sm:text-[8px] font-bold tracking-wide uppercase">Home</span>
             </button>
 
-            <button onclick="switchTab('search')" id="nav-search" class="flex items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors">
-                <div class="w-6 h-6 rounded-[12px] flex items-center justify-center transition-all" id="nav-icon-search-bg">
-                    <svg class="w-3 h-3 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button onclick="switchTab('search')" id="nav-search" class="flex items-center gap-1 sm:flex-col sm:gap-0.5 group text-zinc-500 hover:text-zinc-300 transition-colors">
+                <div class="w-6 h-6 rounded-[12px] sm:w-7 sm:h-7 sm:rounded-[14px] flex items-center justify-center transition-all" id="nav-icon-search-bg">
+                    <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <span class="text-[7px] font-bold tracking-wide uppercase">Search</span>
+                <span class="text-[7px] sm:text-[8px] font-bold tracking-wide uppercase">Search</span>
             </button>
 
-            <button onclick="switchTab('tags')" id="nav-tags" class="flex items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors">
-                <div class="w-6 h-6 rounded-[12px] flex items-center justify-center transition-all" id="nav-icon-tags-bg">
-                    <svg class="w-3 h-3 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
+            <button onclick="switchTab('tags')" id="nav-tags" class="flex items-center gap-1 sm:flex-col sm:gap-0.5 group text-zinc-500 hover:text-zinc-300 transition-colors">
+                <div class="w-6 h-6 rounded-[12px] sm:w-7 sm:h-7 sm:rounded-[14px] flex items-center justify-center transition-all" id="nav-icon-tags-bg">
+                    <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                     </svg>
                 </div>
-                <span class="text-[7px] font-bold tracking-wide uppercase">Tags</span>
+                <span class="text-[7px] sm:text-[8px] font-bold tracking-wide uppercase">Tags</span>
             </button>
         </nav>
 
@@ -934,11 +934,11 @@
                 const bg = document.getElementById(`nav-icon-${nav}-bg`);
 
                 if (nav === tabId) {
-                    btn.className = "flex flex-col items-center gap-1 group text-[#b01a2e] transition-colors";
-                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105";
+                    btn.className = "flex items-center gap-1 sm:flex-col sm:gap-0.5 group text-[#b01a2e] transition-colors";
+                    bg.className = "w-6 h-6 rounded-[12px] sm:w-7 sm:h-7 sm:rounded-[14px] flex items-center justify-center transition-all bg-[#b01a2e]/10 scale-105";
                 } else {
-                    btn.className = "flex flex-col items-center gap-1 group text-zinc-500 hover:text-zinc-300 transition-colors";
-                    bg.className = "w-10 h-10 rounded-[18px] flex items-center justify-center transition-all";
+                    btn.className = "flex items-center gap-1 sm:flex-col sm:gap-0.5 group text-zinc-500 hover:text-zinc-300 transition-colors";
+                    bg.className = "w-6 h-6 rounded-[12px] sm:w-7 sm:h-7 sm:rounded-[14px] flex items-center justify-center transition-all";
                 }
             });
 
